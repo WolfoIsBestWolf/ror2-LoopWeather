@@ -1,4 +1,4 @@
-using LoopVariantConfig;
+using VariantConfig;
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
@@ -71,8 +71,8 @@ namespace LoopVariants
         private static void SulfurPodHelfire(On.EntityStates.Destructible.SulfurPodDeath.orig_Explode orig, EntityStates.Destructible.SulfurPodDeath self)
         {
             bool shouldBeFire = false;
-            // WConfig.Stage_3_Sulfur_Hellfire.Value
-            if (WLoopMain.ShouldAddContent && WConfig.Stage_3_Sulfur.Value)
+            // WConfig.S_3_Sulfur_Hellfire.Value
+            if (WLoopMain.ShouldAddContent && WConfig.S_3_Sulfur.Value)
             {
                 if (Run.instance)
                 {
@@ -172,9 +172,14 @@ namespace LoopVariants
             }
 
         }
-
-        public static void Setup()
+        public static bool setupComplete = false;
+        public static new void Setup()
         {
+            if (setupComplete)
+            {
+                return;
+            }
+            setupComplete = true;
             //On.EntityStates.Destructible.SulfurPodDeath.Explode += SulfurPodHelfire;
             blueLava.name = "sdLavaBlue";
             blueLava.damage = 5f;
@@ -239,26 +244,26 @@ namespace LoopVariants
 
             */
 
-            Texture2D spmSPVine = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/spmSPVine.png");
-            Texture2D texRampArtifactShellSoft = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texRampArtifactShellSoft.png");
-            Texture2D texRampCaptainAirstrike = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texRampCaptainAirstrike.png");
-            Texture2D texRampGreaterWisp = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texRampGreaterWisp.png");
-            Texture2D texRampMagmaWorm = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texRampMagmaWorm.png");
-            Texture2D texRampTeleporterSoft = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texRampTeleporterSoft.png");
-            Cubemap texSkyboxSP = Assets.Bundle.LoadAsset<Cubemap>("Assets/LoopVariants/SulfurPools/texSkyboxSP.png");
-            Texture2D texSPCoralEmi = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texSPCoralEmi.png");
-            Texture2D texSPCoralString = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texSPCoralString.png");
-            Texture2D texSPGrass = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texSPGrass.png");
-            Texture2D texSPGrassEMI = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texSPGrassEMI.png");
-            Texture2D texSPGroundDIFMain = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texSPGroundDIFMain.png");
-            Texture2D texSPGroundDIFPale = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texSPGroundDIFPale.png");
-            Texture2D texSPGroundDIFVein = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texSPGroundDIFVein.png");
-            Texture2D texSPGroundRed = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texSPGroundRed.png");
-            Texture2D texSPGroundRed_FORLAVA = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texSPGroundRed_FORLAVA.png");
-            Texture2D texSPSpheremoss = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texSPSpheremoss.png");
-            Texture2D texSPSphereRock = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texSPSphereRock.png");
-            Texture2D texSPTallGrass = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/texSPTallGrass.png");
-            Texture2D VeinEM = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/SulfurPools/VeinEM.png");
+            Texture2D spmSPVine = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/spmSPVine.png");
+            Texture2D texRampArtifactShellSoft = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texRampArtifactShellSoft.png");
+            Texture2D texRampCaptainAirstrike = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texRampCaptainAirstrike.png");
+            Texture2D texRampGreaterWisp = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texRampGreaterWisp.png");
+            Texture2D texRampMagmaWorm = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texRampMagmaWorm.png");
+            Texture2D texRampTeleporterSoft = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texRampTeleporterSoft.png");
+            Cubemap texSkyboxSP = Assets.LoadAssetAsync<Cubemap>("Assets/LoopVariants/SulfurPools/texSkyboxSP.png");
+            Texture2D texSPCoralEmi = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texSPCoralEmi.png");
+            Texture2D texSPCoralString = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texSPCoralString.png");
+            Texture2D texSPGrass = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texSPGrass.png");
+            Texture2D texSPGrassEMI = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texSPGrassEMI.png");
+            Texture2D texSPGroundDIFMain = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texSPGroundDIFMain.png");
+            Texture2D texSPGroundDIFPale = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texSPGroundDIFPale.png");
+            Texture2D texSPGroundDIFVein = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texSPGroundDIFVein.png");
+            Texture2D texSPGroundRed = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texSPGroundRed.png");
+            Texture2D texSPGroundRed_FORLAVA = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texSPGroundRed_FORLAVA.png");
+            Texture2D texSPSpheremoss = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texSPSpheremoss.png");
+            Texture2D texSPSphereRock = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texSPSphereRock.png");
+            Texture2D texSPTallGrass = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/texSPTallGrass.png");
+            Texture2D VeinEM = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/SulfurPools/VeinEM.png");
 
             Texture2D texRampLightning = Object.Instantiate(Addressables.LoadAssetAsync<Texture2D>(key: "RoR2/Base/Common/ColorRamps/texRampLightning.png").WaitForCompletion());
 
@@ -563,7 +568,7 @@ namespace LoopVariants
             lavaLight_Object2.transform.localPosition = new Vector3(10, 0f, -280);*/
 
 
-            if (!WConfig.Stage_3_Sulfur_ExtraLights.Value)
+            if (!WConfig.S_3_Sulfur_ExtraLights.Value)
             {
                 ////OUTER
                 Light_HOLDER = new GameObject("LavaLight_Holder_Outer");

@@ -9,7 +9,7 @@ namespace LoopVariants
     {
         public static PostProcessProfile ppFrozenWallDay;
 
-        public static void Setup()
+        public static new void Setup()
         {
             ppFrozenWallDay = Object.Instantiate(Addressables.LoadAssetAsync<PostProcessProfile>(key: "RoR2/Base/title/PostProcessing/ppSceneFrozenwallNight.asset").WaitForCompletion());
             PostProcessProfile ppSceneSnowyForest = Addressables.LoadAssetAsync<PostProcessProfile>(key: "RoR2/DLC1/snowyforest/ppSceneSnowyForest.asset").WaitForCompletion();

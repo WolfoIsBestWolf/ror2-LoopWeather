@@ -7,10 +7,7 @@ namespace LoopVariants
 {
     public class Variants_1_GolemPlains : Variant_Base
     {
-        public static void Setup()
-        {
-        }
-
+         
         public static void LoopWeather()
         {
 

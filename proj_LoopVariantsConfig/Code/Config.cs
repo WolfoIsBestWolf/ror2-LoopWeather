@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace LoopVariantConfig
+namespace VariantConfig
 {
     public static class WConfig
     {

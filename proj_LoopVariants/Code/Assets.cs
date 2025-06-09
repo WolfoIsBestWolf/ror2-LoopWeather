@@ -12,6 +12,14 @@ namespace LoopVariants
         public static PluginInfo PluginInfo;
         public static string Folder = "LoopWeather";
 
+
+        public static T LoadAssetAsync<T>(string name) where T : UnityEngine.Object
+        {
+            AssetBundleRequest request = Bundle.LoadAssetAsync<T>(name);
+            //Debug.Log(request.asset);
+            return request.asset as T;
+        }
+
         internal static void Init(PluginInfo info)
         {
             PluginInfo = info;

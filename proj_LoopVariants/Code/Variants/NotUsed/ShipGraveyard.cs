@@ -6,7 +6,7 @@ namespace LoopVariants
 {
     public class Variants_4_ShipGraveyard
     {
-        public static void Setup()
+        public static new void Setup()
         {
         }
 

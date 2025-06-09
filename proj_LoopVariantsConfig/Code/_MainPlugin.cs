@@ -1,22 +1,17 @@
 ﻿using BepInEx;
-using LoopVariants;
 using MonoMod.Cil;
 using R2API.Utils;
 using RoR2;
-using RoR2.ExpansionManagement;
-using RoR2.Stats;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
+using System.Runtime.CompilerServices;
 
-namespace LoopVariantConfig
+namespace VariantConfig
 {
     [BepInDependency("com.bepis.r2api")]
     [BepInPlugin("Wolfo.LoopVariantConfig", "LoopVariantConfig", "1.5.0")]
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
- 
     public class VariantConfig : BaseUnityPlugin
     {
         public static bool HostHasMod_ = false;
@@ -32,9 +27,11 @@ namespace LoopVariantConfig
             }
         }
 
-        public static event Action<DirectorCardCategorySelection> applyWeatherDCCS;
-        public static event Action applyWeatherVisuals;
+        public static event Action<SyncLoopWeather> applyWeatherVisuals;
 
+
+        public static event Action<DirectorCardCategorySelection> applyWeatherDCCS;
+     
         public void Start()
         {
             WConfig.RiskConfig();
@@ -54,8 +51,10 @@ namespace LoopVariantConfig
             //Add component and roll for first stage
             On.RoR2.Run.Awake += AskHostIfHasMod;
             On.RoR2.Run.Start += AddRoll_StartOfRun;
-            On.RoR2.Stage.PreStartClient += Global_RollForNextStage;
-         
+            
+            //PreStart is too early for ObjectToggleGroup
+
+            On.RoR2.Stage.Start += Global_RollForNextStage;
 
             IL.RoR2.ClassicStageInfo.RebuildCards += ApplyVariantDCCSChanges;
 
@@ -64,12 +63,37 @@ namespace LoopVariantConfig
             ChatMessageBase.chatMessageIndexToType.Add(typeof(SendSyncLoopWeather));
             ChatMessageBase.chatMessageTypeToIndex.Add(typeof(HostHasModAlert), (byte)ChatMessageBase.chatMessageIndexToType.Count);
             ChatMessageBase.chatMessageIndexToType.Add(typeof(HostHasModAlert));
- 
-            applyWeatherDCCS += ApplyLoopDCCS;
+
             Stage1_Changes.EditDccs();
+            applyWeatherDCCS += Stage1_Changes.OfficialVariantStage1Friendly;
+
+ 
+        }
+ 
+        private System.Collections.IEnumerator Global_RollForNextStage(On.RoR2.Stage.orig_Start orig, Stage self)
+        {
+            var temp = orig(self);
+            SyncLoopWeather.instance.AppliedToCurrentStage = false;
+            SyncLoopWeather.instance.RollForLoopWeather(false);
+            //If Client && HostNoMod or Host
+            if (!HostHasMod || NetworkServer.active)
+            {
+                if (SyncLoopWeather.instance.CurrentStage_LoopVariant)
+                {
+                    Action<SyncLoopWeather> action = applyWeatherVisuals;
+                    if (action != null)
+                    {
+                        action(SyncLoopWeather.instance);
+                    }
+                    else
+                    {
+                        Debug.Log("applyWeatherVisuals action Null");
+                    }
+                }
+            }
+            return temp;
         }
 
-  
         private void AskHostIfHasMod(On.RoR2.Run.orig_Awake orig, Run self)
         {
             orig(self);
@@ -79,24 +103,10 @@ namespace LoopVariantConfig
                 Chat.SendBroadcastChat(new HostHasModAlert());
             }
         }
-        private void Global_RollForNextStage(On.RoR2.Stage.orig_PreStartClient orig, Stage self)
-        {
-            orig(self);
-            SyncLoopWeather.instance.AppliedToCurrentStage = false;
-            SyncLoopWeather.instance.RollForLoopWeather(false);
-            //If Client && HostNoMod or Host
-            if (!HostHasMod || NetworkServer.active)
-            {
-                if (SyncLoopWeather.instance.CurrentStage_LoopVariant)
-                {
-                    Action action = applyWeatherVisuals;
-                    action();
-                }
-            }
-        }
+ 
         private void AddRoll_StartOfRun(On.RoR2.Run.orig_Start orig, Run self)
         {
-            Debug.LogWarning("On.RoR2.Run.orig_Start");
+            //Debug.LogWarning("On.RoR2.Run.orig_Start");
             SyncLoopWeather.instance.RollForLoopWeather(true);
             orig(self);
         }
@@ -109,12 +119,22 @@ namespace LoopVariantConfig
             {
                 c.EmitDelegate<Func<DirectorCardCategorySelection, DirectorCardCategorySelection>>((dccs) =>
                 {
-                    Debug.LogWarning("IL.RoR2.ClassicStageInfo.RebuildCards");
+                    //Debug.LogWarning("IL.RoR2.ClassicStageInfo.RebuildCards");
                     //Runs before Stage.PreStart so should take Next
                     if (SyncLoopWeather.instance.NextStage_LoopVariant)
                     {
-                        Action<DirectorCardCategorySelection> action = applyWeatherDCCS;
-                        action(dccs);
+                        if (ShouldAddLoopEnemies(dccs))
+                        {
+                            Action<DirectorCardCategorySelection> action = applyWeatherDCCS;
+                            if (action != null)
+                            {
+                                action(dccs);
+                            }
+                            else
+                            {
+                                Debug.Log("applyWeatherDCCS action Null");
+                            }
+                        }
                     }
                     return dccs;
                 });
@@ -123,39 +143,29 @@ namespace LoopVariantConfig
             {
                 Debug.LogWarning("IL Failed: AddVariantExclusiveMonsters");
             }
+        
+        
+        }
+        public static bool ShouldAddLoopEnemies(DirectorCardCategorySelection dccs)
+        {
+            if (dccs == null)
+            {
+                return false;
+            }
+            if (RunArtifactManager.instance && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.mixEnemyArtifactDef))
+            {
+                return false;
+            }
+            if (dccs && dccs is FamilyDirectorCardCategorySelection)
+            {
+                return false;
+            }
+            return true;
         }
 
-        private static void ApplyLoopDCCS(DirectorCardCategorySelection dccs)
-        {
-            Debug.Log("Loop Variant DCCS : " + SceneCatalog.mostRecentSceneDef.baseSceneName);
-            switch (SceneInfo.instance.sceneDef.baseSceneName)
-            {
-                case "lakesnight":
-                    if (WConfig.LakesNightSpawnPool.Value)
-                    {
-                        Stage1_Changes.LakesNight_AddStage1FriendlyMonsters(dccs);
-                    }
-                    break;
-                case "villagenight":
-                    if (WConfig.VillageNight_Credits.Value)
-                    {
-                        if (Run.instance.stageClearCount == 0)
-                        {
-                            ClassicStageInfo.instance.sceneDirectorInteractibleCredits = 280;
-                            HG.ArrayUtils.ArrayAppend(ref ClassicStageInfo.instance.bonusInteractibleCreditObjects,
-                                new ClassicStageInfo.BonusInteractibleCreditObject
-                                {
-                                    points = -25, //Large Chest flat reduction
-                                    objectThatGrantsPointsIfEnabled = RoR2.Run.instance.gameObject
-                                });
-                        }
-                    }
-                    break;
-            }
-        }
- 
-        
- 
+
+
+
         public class HostHasModAlert : ChatMessageBase
         {
             public override string ConstructChatString()
@@ -183,8 +193,15 @@ namespace LoopVariantConfig
                     Debug.Log("Next Stage Loop Variant : " + SyncLoopWeather.instance);
                     if (SyncLoopWeather.instance.CurrentStage_LoopVariant)
                     {
-                        Action action = applyWeatherVisuals;
-                        action();
+                        Action<SyncLoopWeather> action = applyWeatherVisuals;
+                        if (action != null)
+                        {
+                            action(SyncLoopWeather.instance);
+                        }
+                        else
+                        {
+                            Debug.Log("applyWeatherVisuals action Null");
+                        }
                     }
                 }
                 return null;

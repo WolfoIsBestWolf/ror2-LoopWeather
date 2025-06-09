@@ -6,7 +6,7 @@ namespace LoopVariants
 {
     public class Variants_5_SkyMeadow : Variant_Base
     {
-        public static void Setup()
+        public static new void Setup()
         {
         }
 

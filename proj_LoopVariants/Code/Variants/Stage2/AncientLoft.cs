@@ -14,10 +14,14 @@ namespace LoopVariants
         public static Material matAncientLoftEndlessHole;
         public static Material matEclipseMoon;
 
-
-        public static void Setup()
+        public static bool setupComplete = false;
+        public static new void Setup()
         {
-
+            if (setupComplete)
+            {
+                return;
+            }
+            setupComplete = true;
             matAncientLoft_CloudFloor = Object.Instantiate(Addressables.LoadAssetAsync<Material>(key: "RoR2/DLC1/ancientloft/matAncientLoft_CloudFloor.mat").WaitForCompletion());
             matAncientLoft_CloudFloor.SetColor("_TintColor", new Color(0.03f, 0.07f, 0.16f, 1f)); //0.1604 0.0604 0.025 1
 
@@ -122,10 +126,6 @@ namespace LoopVariants
 
         public static void AddVariantMonsters(DirectorCardCategorySelection dccs)
         {
-            if (ShouldAddLoopEnemies(dccs) == false)
-            {
-                return;
-            }
             DirectorCard LoopLunarExploder = new DirectorCard
             {
                 spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscLunarExploder"),

@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using VariantConfig;
 using R2API.Utils;
 using RoR2;
 using System;
@@ -11,10 +12,8 @@ namespace LoopVariants
 {
     [BepInDependency("com.bepis.r2api")]
     [BepInDependency("Wolfo.LoopVariantConfig")]
-    [BepInPlugin("Wolfo.WLoopVariants", "WolfosLoopVariants", "1.5.0")]
+    [BepInPlugin("Wolfo.LoopVariantsWolfo", "WolfosLoopVariants", "1.5.0")]
     [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
-
-
     public class WLoopMain : BaseUnityPlugin
     {
 
@@ -32,14 +31,14 @@ namespace LoopVariants
         {
             get
             {
-                if (WConfig.cfgGameplayChanges.Value == WConfig.AddContent.Always)
+                /*if (WConfig.cfgGameplayChanges.Value == WConfig.AddContent.Always)
                 {
                     return true;
                 }
                 if (WConfig.cfgGameplayChanges.Value == WConfig.AddContent.Never)
                 {
                     return false;
-                }
+                }*/
                 return peopleWithMod == PlayerCharacterMasterController.instances.Count;
             }
         }
@@ -59,8 +58,8 @@ namespace LoopVariants
             RemoveVariantNames();
             On.RoR2.UI.AssignStageToken.Start += ApplyLoopNameChanges;
  
-            LoopVariantConfig.VariantConfig.applyWeatherDCCS += VariantDCCS;
-            LoopVariantConfig.VariantConfig.applyWeatherVisuals += VariantConfig_applyWeatherGlobal;
+            VariantConfig.VariantConfig.applyWeatherDCCS += VariantDCCS;
+            VariantConfig.VariantConfig.applyWeatherVisuals += VariantConfig_applyWeatherGlobal;
 
             ChatMessageBase.chatMessageTypeToIndex.Add(typeof(ClientPing), (byte)ChatMessageBase.chatMessageIndexToType.Count);
             ChatMessageBase.chatMessageIndexToType.Add(typeof(ClientPing));
@@ -79,7 +78,7 @@ namespace LoopVariants
 
         
 
-        private void VariantConfig_applyWeatherGlobal()
+        private void VariantConfig_applyWeatherGlobal(SyncLoopWeather weather)
         {
             bool hadVariant = false;
             try
@@ -87,9 +86,10 @@ namespace LoopVariants
                 switch (SceneInfo.instance.sceneDef.baseSceneName)
                 {
                     case "golemplains":
-                        if (WConfig.Stage_1_Golem.Value)
+                        if (WConfig.S_1_Golem.Value)
                         {
                             hadVariant = true;
+                            Variants_1_GolemPlains.Setup();
                             Variants_1_GolemPlains.LoopWeather();
                         }
                         break;
@@ -97,69 +97,82 @@ namespace LoopVariants
                         if (WConfig.WIP.Value)
                         {
                             hadVariant = true;
+                            Variants_1_BlackBeach.Setup();
                             Variants_1_BlackBeach.LoopWeather();
                         }
                         break;
                     case "snowyforest":
-                        if (WConfig.Stage_1_Snow.Value)
+                        if (WConfig.S_1_Snow.Value)
                         {
                             hadVariant = true;
+                            Variants_1_SnowyForest.Setup();
                             Variants_1_SnowyForest.LoopWeather();
                         }
                         break;
                     case "goolake":
-                        if (WConfig.Stage_2_Goolake.Value)
+                        if (WConfig.S_2_Goolake.Value)
                         {
                             hadVariant = true;
+                            Variants_2_Goolake.Setup();
                             Variants_2_Goolake.LoopWeather();
                         }
                         break;
                     case "foggyswamp":
-                        if (WConfig.Stage_2_Swamp.Value)
+                        if (WConfig.S_2_FoggySwamp.Value)
                         {
                             hadVariant = true;
+                            Variants_2_FoggySwamp.Setup();
                             Variants_2_FoggySwamp.LoopWeather();
                         }
                         break;
                     case "ancientloft":
-                        if (WConfig.Stage_2_Ancient.Value)
+                        if (WConfig.S_2_Ancient.Value)
                         {
                             hadVariant = true;
+                            Variants_2_AncientLoft.Setup();
                             Variants_2_AncientLoft.LoopWeather();
                         }
                         break;
                     case "lemuriantemple":
-                        if (WConfig.Stage_2_Temple.Value)
+
+                        Variants_2_LemurianTemple.Setup();
+                        Variants_2_LemurianTemple.LoopWeather();
+                        if (WConfig.S_2_LemurianTemple_Legacy.Value)
                         {
                             hadVariant = true;
-                            Variants_2_LemurianTemple.LoopWeather();
+                            Variants_2_LemurianTemple_Legacy.Setup();
+                            Variants_2_LemurianTemple_Legacy.LoopWeather();
                         }
                         break;
                     case "frozenwall":
                         if (WConfig.WIP.Value)
                         {
                             hadVariant = true;
+                            Variants_3_FrozenWall.Setup();
                             Variants_3_FrozenWall.LoopWeather();
                         }
                         break;
                     case "wispgraveyard":
-                        if (WConfig.Stage_3_Wisp.Value)
+                        if (WConfig.S_3_Wisp.Value)
                         {
                             hadVariant = true;
+                            Variants_3_WispGraveyard.LoopWeather();
                             Variants_3_WispGraveyard.LoopWeather();
                         }
                         break;
                     case "sulfurpools":
-                        if (WConfig.Stage_3_Sulfur.Value)
+                        if (WConfig.S_3_Sulfur.Value)
                         {
                             hadVariant = true;
+                            Variants_3_Sulfur.Setup();
                             Variants_3_Sulfur.LoopWeather();
                         }
                         break;
                     case "dampcavesimple":
-                        if (WConfig.Stage_4_Damp_Abyss.Value)
+                        if (WConfig.S_4_DampAbyss_Legacy.Value)
                         {
                             hadVariant = true;
+                            Variants_4_DampCaveSimpleAbyss.Setup();
                             Variants_4_DampCaveSimpleAbyss.LoopWeather();
                         }
                         break;
@@ -167,13 +180,15 @@ namespace LoopVariants
                         if (WConfig.WIP.Value)
                         {
                             hadVariant = true;
+                            Variants_4_ShipGraveyard.Setup();
                             Variants_4_ShipGraveyard.LoopWeather();
                         }
                         break;
                     case "rootjungle":
-                        if (WConfig.Stage_4_Root_Jungle.Value)
+                        if (WConfig.S_4_Root_Jungle.Value)
                         {
-                            hadVariant = true;
+                            hadVariant = true; 
+                            Variants_4_RootJungle.Setup();
                             Variants_4_RootJungle.LoopWeather();
                         }
                         break;
@@ -181,13 +196,15 @@ namespace LoopVariants
                         if (WConfig.WIP.Value)
                         {
                             hadVariant = true;
+                            Variants_5_SkyMeadow.Setup();
                             Variants_5_SkyMeadow.LoopWeather();
                         }
                         break;
                     case "helminthroost":
-                        if (WConfig.Stage_5_Helminth.Value)
+                        if (WConfig.S_5_Helminth_Legacy.Value)
                         {
                             hadVariant = true;
+                            Variants_5_HelminthRoost.Setup();
                             Variants_5_HelminthRoost.LoopWeather();
                         }
                         break;
@@ -195,13 +212,15 @@ namespace LoopVariants
                         if (WConfig.WIP.Value)
                         {
                             hadVariant = true;
+                            Variants_6_Moon.Setup();
                             Variants_6_Moon.LoopWeather();
                         }
                         break;
                     case "meridian":
-                        if (WConfig.Stage_6_Meridian.Value)
+                        if (WConfig.S_6_Meridian.Value)
                         {
                             //hadVariant = true;
+                            Variants_6_Meridian.Setup();
                             Variants_6_Meridian.LoopWeather();
                         }
                         break;
@@ -215,7 +234,7 @@ namespace LoopVariants
             if (hadVariant)
             {
                 Debug.Log("Applying Weather to " + SceneInfo.instance.sceneDef.baseSceneName);
-                LoopVariantConfig.SyncLoopWeather.instance.AppliedToCurrentStage = true;
+                SyncLoopWeather.instance.AppliedToCurrentStage = true;
             }
         }
 
@@ -230,41 +249,36 @@ namespace LoopVariants
                 switch (SceneInfo.instance.sceneDef.baseSceneName)
                 {
                     case "snowyforest":
-                        if (WConfig.Enemy_1_Snow.Value && WConfig.Stage_1_Snow.Value)
+                        if (WConfig.Enemy_1_Snow.Value && WConfig.S_1_Snow.Value)
                         {
                             Variants_1_SnowyForest.AddVariantMonsters(dccs);
                         }
                         break;
                     case "ancientloft":
-                        if (WConfig.Enemy_2_Ancient.Value && WConfig.Stage_2_Ancient.Value)
+                        if (WConfig.Enemy_2_Ancient.Value && WConfig.S_2_Ancient.Value)
                         {
                             Variants_2_AncientLoft.AddVariantMonsters(dccs);
                         }
                         break;
                     case "wispgraveyard":
-                        if (WConfig.Enemy_3_Wisp.Value && WConfig.Stage_3_Wisp.Value)
+                        if (WConfig.Enemy_3_Wisp.Value && WConfig.S_3_Wisp.Value)
                         {
                             Variants_3_WispGraveyard.AddVariantMonsters(dccs);
                         }
                         break;
                     case "dampcavesimple":
-                        if (WConfig.Enemy_4_Damp_Abyss.Value && WConfig.Stage_4_Damp_Abyss.Value)
+                        if (WConfig.Enemy_4_Damp_Abyss_Legacy.Value && WConfig.S_4_DampAbyss_Legacy.Value)
                         {
                             Variants_4_DampCaveSimpleAbyss.AddVariantMonsters(dccs);
                         }
                         break;
                     case "rootjungle":
-                        if (WConfig.Enemy_4_Root_Jungle.Value && WConfig.Stage_4_Root_Jungle.Value)
+                        if (WConfig.Enemy_4_Root_Jungle.Value && WConfig.S_4_Root_Jungle.Value)
                         {
                             Variants_4_RootJungle.AddVariantMonsters(dccs);
                         }
                         break;
-                    case "helminthroost":
-                        if (WConfig.Enemy_5_Helminth.Value && WConfig.Stage_5_Helminth.Value)
-                        {
-                            Variants_5_HelminthRoost.AddVariantMonsters(dccs);
-                        }
-                        break;
+ 
                 }
             }
             catch (Exception e)
@@ -276,76 +290,76 @@ namespace LoopVariants
         public static void RemoveVariantNames()
         {
 
-            if (!WConfig.Stage_1_Golem.Value)
+            if (!WConfig.S_1_Golem.Value)
             {
                 DisabledVariants.Add("golemplains");
             }
-            if (WConfig.Stage_1_Roost != null && !WConfig.Stage_1_Roost.Value)
+            if (WConfig.S_1_Roost != null && !WConfig.S_1_Roost.Value)
             {
                 DisabledVariants.Add("blackbeach");
             }
-            if (!WConfig.Stage_1_Snow.Value)
+            if (!WConfig.S_1_Snow.Value)
             {
                 DisabledVariants.Add("snowyforest");
             }
             //
-            if (!WConfig.Stage_2_Goolake.Value)
+            if (!WConfig.S_2_Goolake.Value)
             {
                 DisabledVariants.Add("goolake");
             }
-            if (!WConfig.Stage_2_Swamp.Value)
+            if (!WConfig.S_2_FoggySwamp.Value)
             {
                 DisabledVariants.Add("foggyswamp");
             }
-            if (!WConfig.Stage_2_Ancient.Value)
+            if (!WConfig.S_2_Ancient.Value)
             {
                 DisabledVariants.Add("ancientloft");
             }
-            if (!WConfig.Stage_2_Temple.Value)
+            if (!WConfig.S_2_LemurianTemple_Legacy.Value)
             {
                 DisabledVariants.Add("lemuriantemple");
             }
             //
-            if (WConfig.Stage_3_Frozen != null && !WConfig.Stage_3_Frozen.Value)
+            if (WConfig.S_3_Frozen != null && !WConfig.S_3_Frozen.Value)
             {
                 DisabledVariants.Add("frozenwall");
             }
-            if (!WConfig.Stage_3_Wisp.Value)
+            if (!WConfig.S_3_Wisp.Value)
             {
                 DisabledVariants.Add("wispgraveyard");
             }
-            if (!WConfig.Stage_3_Sulfur.Value)
+            if (!WConfig.S_3_Sulfur.Value)
             {
                 DisabledVariants.Add("sulfurpools");
             }
             //
-            if (!WConfig.Stage_4_Damp_Abyss.Value)
+            if (!WConfig.S_4_DampAbyss_Legacy.Value)
             {
                 DisabledVariants.Add("dampcavesimple");
             }
-            if (WConfig.Stage_4_Ship != null && !WConfig.Stage_4_Ship.Value)
+            if (WConfig.S_4_Ship != null && !WConfig.S_4_Ship.Value)
             {
                 DisabledVariants.Add("shipgraveyard");
             }
-            if (!WConfig.Stage_4_Root_Jungle.Value)
+            if (!WConfig.S_4_Root_Jungle.Value)
             {
                 DisabledVariants.Add("rootjungle");
             }
             //
-            if (WConfig.Stage_5_Sky != null && !WConfig.Stage_5_Sky.Value)
+            if (WConfig.S_5_Sky != null && !WConfig.S_5_Sky.Value)
             {
                 DisabledVariants.Add("skymeadow");
             }
-            if (!WConfig.Stage_5_Helminth.Value)
+            if (!WConfig.S_5_Helminth_Legacy.Value)
             {
                 DisabledVariants.Add("helminthroost");
             }
             //
-            if (WConfig.Stage_6_Commencement != null && !WConfig.Stage_6_Commencement.Value)
+            if (WConfig.S_6_Commencement != null && !WConfig.S_6_Commencement.Value)
             {
                 DisabledVariants.Add("moon2");
             }
-            if (!WConfig.Stage_6_Meridian.Value)
+            if (!WConfig.S_6_Meridian.Value)
             {
                 DisabledVariants.Add("meridian");
             }
@@ -356,12 +370,10 @@ namespace LoopVariants
             orig(self);
             if (WConfig.Name_Changes.Value)
             {
-                if (LoopVariantConfig.SyncLoopWeather.instance.CurrentStage_LoopVariant)
+                if (SyncLoopWeather.instance.CurrentStage_LoopVariant && SyncLoopWeather.instance.AppliedToCurrentStage)
                 {
                     SceneDef mostRecentSceneDef = SceneCatalog.mostRecentSceneDef;
-                    //If token exists
-                    Language language2 = Language.FindLanguageByName("en");
-                    if (language2.stringsByToken.ContainsKey(mostRecentSceneDef.nameToken + "_LOOP"))
+                    if (Language.english.TokenIsRegistered(mostRecentSceneDef.nameToken + "_LOOP"))
                     {
                         if (!DisabledVariants.Contains(mostRecentSceneDef.baseSceneName))
                         {

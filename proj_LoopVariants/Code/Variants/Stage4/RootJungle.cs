@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.PostProcessing;
+using static LoopVariants.Assets;
 
 namespace LoopVariants
 {
@@ -52,158 +53,64 @@ namespace LoopVariants
 
         public static GameObject Fruit;
         public static GameObject FruitFall;
-        public static GameObject JellyfishDeath;
-
-
-        public static void Setup()
+        
+        public static bool setupComplete = false;
+        public static new void Setup()
         {
+            if (setupComplete)
+            {
+                return;
+            }
+            setupComplete = true;
 
-            On.EntityStates.Fauna.HabitatFruitDeathState.OnEnter += FixDumbFruit;
-            JellyfishDeath = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/Base/Jellyfish/JellyfishDeath.prefab").WaitForCompletion();
-            EntityStates.Fauna.HabitatFruitDeathState.deathSoundString = "Play_jellyfish_death";
-            //EntityStates.Fauna.HabitatFruitDeathState.healPackCount = 2;
-            EntityStates.Fauna.HabitatFruitDeathState.healPackMaxVelocity = 60;
-            EntityStates.Fauna.HabitatFruitDeathState.fractionalHealing = 0.15f;
-            EntityStates.Fauna.HabitatFruitDeathState.scale = 1;
-
-            /*
-            Texture2D texRJMossPatch1Diffuse = new Texture2D(2048, 2048, TextureFormat.DXT1, true);
-            texRJMossPatch1Diffuse.LoadImage(Properties.Resources.texRJMossPatch1Diffuse, false);
-
-            Texture2D texRJMossPatch2Diffuse = new Texture2D(2048, 2048, TextureFormat.DXT1, true);
-            texRJMossPatch2Diffuse.LoadImage(Properties.Resources.texRJMossPatch2Diffuse, false);
-
-            Texture2D texRJLichenTerrain = new Texture2D(1024, 1024, TextureFormat.DXT5, true);
-            texRJLichenTerrain.LoadImage(Properties.Resources.texRJLichenTerrain, false);
-
-            Texture2D texRJShroomBounceDiffuse = new Texture2D(2048, 2048, TextureFormat.DXT1, true);
-            texRJShroomBounceDiffuse.LoadImage(Properties.Resources.texRJShroomBounceDiffuse, false);
-
-            Texture2D texRJShroomBigDiffuse = new Texture2D(2048, 2048, TextureFormat.DXT1, true);
-            texRJShroomBigDiffuse.LoadImage(Properties.Resources.texRJShroomBigDiffuse, false);
-
-            Texture2D texRJShroomBigEmissive = new Texture2D(2048, 2048, TextureFormat.DXT5, true);
-            texRJShroomBigEmissive.LoadImage(Properties.Resources.texRJShroomBigEmissive, false);
-
-            Texture2D texRJShroomShelfDiffuse = new Texture2D(2048, 2048, TextureFormat.DXT1, true);
-            texRJShroomShelfDiffuse.LoadImage(Properties.Resources.texRJShroomShelfDiffuse, false);
-
-            Texture2D texRJShroomShelfEmissive = new Texture2D(2048, 2048, TextureFormat.DXT5, true);
-            texRJShroomShelfEmissive.LoadImage(Properties.Resources.texRJShroomShelfEmissive, false);
-
-            Texture2D texRJShroomSmallDiffuse = new Texture2D(2048, 2048, TextureFormat.DXT1, true);
-            texRJShroomSmallDiffuse.LoadImage(Properties.Resources.texRJShroomSmallDiffuse, false);
-
-            Texture2D texRJShroomSmallEmissive = new Texture2D(2048, 2048, TextureFormat.DXT5, true);
-            texRJShroomSmallEmissive.LoadImage(Properties.Resources.texRJShroomSmallEmissive, false);
-
-            Texture2D texRampRJMushroom = new Texture2D(16, 256, TextureFormat.DXT5, true);
-            texRampRJMushroom.LoadImage(Properties.Resources.texRampRJMushroom, false);
-          
-
-            Texture2D texRJMoss = new Texture2D(1024, 1024, TextureFormat.DXT5, true);
-            texRJMoss.LoadImage(Properties.Resources.texRJMoss, false);
-
-            Texture2D texRJTree = new Texture2D(1024, 1024, TextureFormat.DXT1, true);
-            texRJTree.LoadImage(Properties.Resources.texRJTree, false);
-
-            Texture2D texRJTreeTop = new Texture2D(1024, 1024, TextureFormat.DXT1, true);
-            texRJTreeTop.LoadImage(Properties.Resources.texRJMoss, false);
-
-            Texture2D texRJTriangleDiffuse = new Texture2D(2048, 2048, TextureFormat.DXT1, true);
-            texRJTriangleDiffuse.LoadImage(Properties.Resources.texRJTriangleDiffuse, false);
-
-            Texture2D texRJGrassTerrain = new Texture2D(1024, 1024, TextureFormat.DXT5, true);
-            texRJGrassTerrain.LoadImage(Properties.Resources.texRJGrassTerrain, false);
-
-            Texture2D texRJGrassTerrain2 = new Texture2D(1024, 1024, TextureFormat.DXT5, true);
-            texRJGrassTerrain2.LoadImage(Properties.Resources.texRJGrassTerrain2, false);
-            texRJGrassTerrain2.Apply();
-
-            Texture2D RJDistantTreeFoliage_Color = new Texture2D(2048, 2048, TextureFormat.DXT5, true);
-            RJDistantTreeFoliage_Color.LoadImage(Properties.Resources.RJDistantTreeFoliage_Color, false);
-
-            Texture2D TEX_RJTowerTreeFoliage = new Texture2D(2048, 2048, TextureFormat.DXT5, true);
-            TEX_RJTowerTreeFoliage.LoadImage(Properties.Resources.RJTowerTreeFoliage_Color, false);
-
-            Texture2D spmRJgrass1_Color = new Texture2D(2048, 2048, TextureFormat.DXT5, true);
-            spmRJgrass1_Color.LoadImage(Properties.Resources.spmRJgrass1_Color, false);
-
-            Texture2D spmRJgrass1_Subsurface = new Texture2D(512, 512, TextureFormat.DXT1, true);
-            spmRJgrass1_Subsurface.LoadImage(Properties.Resources.spmRJgrass1_Subsurface, false);
-
-            Texture2D spmRJgrass2_Color = new Texture2D(2048, 2048, TextureFormat.DXT5, true);
-            spmRJgrass2_Color.LoadImage(Properties.Resources.spmRJgrass2_Color, false);
-
-            Texture2D spmRJgrass2_Subsurface = new Texture2D(512, 512, TextureFormat.DXT1, true);
-            spmRJgrass2_Subsurface.LoadImage(Properties.Resources.spmRJgrass2_Subsurface, false);
-
-            Texture2D RJHangingMoss_Color = new Texture2D(128, 512, TextureFormat.DXT5, true);
-            RJHangingMoss_Color.LoadImage(Properties.Resources.RJHangingMoss_Color, false);
-
-            Texture2D RJMossFoliage_Color = new Texture2D(512, 512, TextureFormat.DXT5, true);
-            RJMossFoliage_Color.LoadImage(Properties.Resources.RJMossFoliage_Color, false);
-
-            Texture2D RJpinkshroom_Color = new Texture2D(512, 512, TextureFormat.DXT5, true);
-            RJpinkshroom_Color.LoadImage(Properties.Resources.RJpinkshroom_Color, false);
-
-            Texture2D texRJpinkshroomEmission = new Texture2D(256, 256, TextureFormat.DXT1, true);
-            texRJpinkshroomEmission.LoadImage(Properties.Resources.texRJpinkshroomEmission, false);
-
-            Texture2D RJShroomFoliage_Color = new Texture2D(512, 512, TextureFormat.DXT5, true);
-            RJShroomFoliage_Color.LoadImage(Properties.Resources.RJShroomFoliage_Color, false);
-
-            Texture2D RJTreeBigFoliage_Color = new Texture2D(128, 512, TextureFormat.DXT5, true);
-            RJTreeBigFoliage_Color.LoadImage(Properties.Resources.RJTreeBigFoliage_Color, false);
-            */
-
-            Texture2D Material_2_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/Material_2_Color.png");
-            Texture2D RJDistantTreeFoliage_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJDistantTreeFoliage_Color.png");
-            Texture2D RJDistantTreeFoliageCard = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJDistantTreeFoliageCard.png");
-            Texture2D RJfern_Billboard_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJfern_Billboard_Color.png");
-            Texture2D RJfern_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJfern_Color.png");
-            Texture2D RJHangingMoss_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJHangingMoss_Color.png");
-            Texture2D RJMossFoliage_Billboard_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJMossFoliage_Billboard_Color.png");
-            Texture2D RJMossFoliage_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJMossFoliage_Color.png");
-            Texture2D RJpinkshroom_Billboard_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJpinkshroom_Billboard_Color.png");
-            Texture2D RJpinkshroom_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJpinkshroom_Color.png");
-            Texture2D RJShroomFoliage_Billboard_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJShroomFoliage_Billboard_Color.png");
-            Texture2D RJShroomFoliage_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJShroomFoliage_Color.png");
-            Texture2D RJTowerTreeBark = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJTowerTreeBark.png");
-            //Texture2D RJTowerTreeFoliage = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJTowerTreeFoliage.png");
-            Texture2D RJTowerTreeFoliage_Billboard_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJTowerTreeFoliage_Billboard_Color.png");
-            Texture2D RJTowerTreeFoliage_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJTowerTreeFoliage_Color.png");
-            Texture2D RJTreeBigFoliage_Billboard_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJTreeBigFoliage_Billboard_Color.png");
-            Texture2D RJTreeBigFoliage_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/RJTreeBigFoliage_Color.png");
-            Texture2D spmRJgrass1_Billboard_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass1_Billboard_Color.png");
-            Texture2D spmRJgrass1_Billboard_Subsurface = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass1_Billboard_Subsurface.png");
-            Texture2D spmRJgrass1_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass1_Color.png");
-            Texture2D spmRJgrass1_Subsurface = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass1_Subsurface.png");
-            Texture2D spmRJgrass2_Billboard_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass2_Billboard_Color.png");
-            Texture2D spmRJgrass2_Billboard_Subsurface = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass2_Billboard_Subsurface.png");
-            Texture2D spmRJgrass2_Subsurface = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass2_Subsurface.png");
-            Texture2D spmRJgrasstest_Billboard_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrasstest_Billboard_Color.png");
-            Texture2D texRampRJMushroom = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRampRJMushroom.png");
-            Texture2D texRJDirtDiffuse = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJDirtDiffuse.png");
-            Texture2D texRJGrassTerrain = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJGrassTerrain.png");
-            Texture2D texRJGrassTerrain2 = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJGrassTerrain2.png");
-            Texture2D texRJLichenTerrain = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJLichenTerrain.png");
-            Texture2D texRJMoss = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJMoss.png");
-            Texture2D texRJMossPatch1Diffuse = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJMossPatch1Diffuse.png");
-            Texture2D texRJMossPatch2Diffuse = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJMossPatch2Diffuse.png");
-            Texture2D texRJMossPatchLargeDiffuse = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJMossPatchLargeDiffuse.png");
-            Texture2D texRJpinkshroomEmission = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJpinkshroomEmission.png");
-            Texture2D texRJShroomBigDiffuse = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJShroomBigDiffuse.png");
-            Texture2D texRJShroomBigEmissive = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJShroomBigEmissive.png");
-            Texture2D texRJShroomBounceDiffuse = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJShroomBounceDiffuse.png");
-            Texture2D texRJShroomShelfDiffuse = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJShroomShelfDiffuse.png");
-            Texture2D texRJShroomShelfEmissive = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJShroomShelfEmissive.png");
-            Texture2D texRJShroomSmallDiffuse = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJShroomSmallDiffuse.png");
-            Texture2D texRJShroomSmallEmissive = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJShroomSmallEmissive.png");
-            Texture2D texRJTree = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJTree.png");
-            Texture2D texRJTreeTop = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJTreeTop.png");
-            Texture2D texRJTriangleDiffuse = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/texRJTriangleDiffuse.png");
-            Texture2D spmRJgrass2_Color = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass2_Color.png");
+         
+            Texture2D Material_2_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/Material_2_Color.png");
+            Texture2D RJDistantTreeFoliage_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJDistantTreeFoliage_Color.png");
+            Texture2D RJDistantTreeFoliageCard = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJDistantTreeFoliageCard.png");
+            Texture2D RJfern_Billboard_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJfern_Billboard_Color.png");
+            Texture2D RJfern_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJfern_Color.png");
+            Texture2D RJHangingMoss_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJHangingMoss_Color.png");
+            Texture2D RJMossFoliage_Billboard_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJMossFoliage_Billboard_Color.png");
+            Texture2D RJMossFoliage_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJMossFoliage_Color.png");
+            Texture2D RJpinkshroom_Billboard_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJpinkshroom_Billboard_Color.png");
+            Texture2D RJpinkshroom_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJpinkshroom_Color.png");
+            Texture2D RJShroomFoliage_Billboard_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJShroomFoliage_Billboard_Color.png");
+            Texture2D RJShroomFoliage_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJShroomFoliage_Color.png");
+            Texture2D RJTowerTreeBark = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJTowerTreeBark.png");
+            //Texture2D RJTowerTreeFoliage = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJTowerTreeFoliage.png");
+            Texture2D RJTowerTreeFoliage_Billboard_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJTowerTreeFoliage_Billboard_Color.png");
+            Texture2D RJTowerTreeFoliage_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJTowerTreeFoliage_Color.png");
+            Texture2D RJTreeBigFoliage_Billboard_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJTreeBigFoliage_Billboard_Color.png");
+            Texture2D RJTreeBigFoliage_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/RJTreeBigFoliage_Color.png");
+            Texture2D spmRJgrass1_Billboard_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass1_Billboard_Color.png");
+            Texture2D spmRJgrass1_Billboard_Subsurface = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass1_Billboard_Subsurface.png");
+            Texture2D spmRJgrass1_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass1_Color.png");
+            Texture2D spmRJgrass1_Subsurface = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass1_Subsurface.png");
+            Texture2D spmRJgrass2_Billboard_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass2_Billboard_Color.png");
+            Texture2D spmRJgrass2_Billboard_Subsurface = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass2_Billboard_Subsurface.png");
+            Texture2D spmRJgrass2_Subsurface = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass2_Subsurface.png");
+            Texture2D spmRJgrasstest_Billboard_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrasstest_Billboard_Color.png");
+            Texture2D texRampRJMushroom = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRampRJMushroom.png");
+            Texture2D texRJDirtDiffuse = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJDirtDiffuse.png");
+            Texture2D texRJGrassTerrain = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJGrassTerrain.png");
+            Texture2D texRJGrassTerrain2 = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJGrassTerrain2.png");
+            Texture2D texRJLichenTerrain = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJLichenTerrain.png");
+            Texture2D texRJMoss = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJMoss.png");
+            Texture2D texRJMossPatch1Diffuse = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJMossPatch1Diffuse.png");
+            Texture2D texRJMossPatch2Diffuse = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJMossPatch2Diffuse.png");
+            Texture2D texRJMossPatchLargeDiffuse = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJMossPatchLargeDiffuse.png");
+            Texture2D texRJpinkshroomEmission = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJpinkshroomEmission.png");
+            Texture2D texRJShroomBigDiffuse = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJShroomBigDiffuse.png");
+            Texture2D texRJShroomBigEmissive = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJShroomBigEmissive.png");
+            Texture2D texRJShroomBounceDiffuse = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJShroomBounceDiffuse.png");
+            Texture2D texRJShroomShelfDiffuse = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJShroomShelfDiffuse.png");
+            Texture2D texRJShroomShelfEmissive = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJShroomShelfEmissive.png");
+            Texture2D texRJShroomSmallDiffuse = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJShroomSmallDiffuse.png");
+            Texture2D texRJShroomSmallEmissive = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJShroomSmallEmissive.png");
+            Texture2D texRJTree = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJTree.png");
+            Texture2D texRJTreeTop = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJTreeTop.png");
+            Texture2D texRJTriangleDiffuse = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/texRJTriangleDiffuse.png");
+            Texture2D spmRJgrass2_Color = LoadAssetAsync<Texture2D>("Assets/LoopVariants/RootJungle/spmRJgrass2_Color.png");
             texRampRJMushroom.wrapMode = TextureWrapMode.Clamp;
 
 
@@ -367,22 +274,7 @@ namespace LoopVariants
 
         }
 
-        private static void FixDumbFruit(On.EntityStates.Fauna.HabitatFruitDeathState.orig_OnEnter orig, EntityStates.Fauna.HabitatFruitDeathState self)
-        {
 
-            if (NetworkServer.active)
-            {
-                Transform Fruit = self.gameObject.transform.GetChild(1).GetChild(3);
-                EffectManager.SimpleImpactEffect(JellyfishDeath, Fruit.position, Vector3.up, true);
-                GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/HealPack"), Fruit.position, UnityEngine.Random.rotation);
-                gameObject.GetComponent<TeamFilter>().teamIndex = TeamIndex.Player;
-                gameObject.GetComponentInChildren<HealthPickup>().fractionalHealing = HabitatFruitDeathState.fractionalHealing;
-                gameObject.transform.localScale = new Vector3(HabitatFruitDeathState.scale, HabitatFruitDeathState.scale, HabitatFruitDeathState.scale);
-                gameObject.GetComponent<Rigidbody>().AddForce(UnityEngine.Random.insideUnitSphere * HabitatFruitDeathState.healPackMaxVelocity, ForceMode.VelocityChange);
-                NetworkServer.Spawn(gameObject);
-            }
-            orig(self);
-        }
 
         public static void LoopWeather()
         {
@@ -412,6 +304,32 @@ namespace LoopVariants
             Weather.transform.GetChild(2).GetComponent<ReflectionProbe>().bakedTexture = Addressables.LoadAssetAsync<Cubemap>(key: "RoR2/DLC2/habitatfall/ReflectionProbe-0.exr").WaitForCompletion();
 
 
+ 
+            TheSun.color = new Color(1f, 0.9176f, 0.749f, 1);//0.749 0.9176 1 1
+            TheSun.intensity = 0.35f; //0.7
+            /*
+            PostProcessProfile PP_AncientLoft = Object.Instantiate(Addressables.LoadAssetAsync<PostProcessProfile>(key: "RoR2/DLC1/ancientloft/ppSceneAncientLoft.asset").WaitForCompletion());
+            PostProcessProfile ppSceneGoolake = Addressables.LoadAssetAsync<PostProcessProfile>(key: "RoR2/Base/title/PostProcessing/ppSceneGoolake.asset").WaitForCompletion();
+
+            RampFog rampFog = (RampFog)Object.Instantiate(PP_AncientLoft.settings[0]);
+            RampFog rampFogG = (RampFog)ppSceneGoolake.settings[0];
+
+            //rampFog.fogColorMid.value = new Color(0.67 0.435 0.35 0.44);//
+            //rampFog.fogColorEnd.value = (rampFog.fogColorEnd.value*2 + rampFogG.fogColorMid.value) / 3;
+            //rampFog.fogColorMid.value = (rampFog.fogColorMid.value + rampFogG.fogColorMid.value) / 2;
+            //rampFog.fogColorStart.value = (rampFog.fogColorStart.value + rampFogG.fogColorStart.value) / 2;
+            rampFog.fogColorEnd.value = new Color(0.6f, 0.5f, 0.34f, 1);
+            rampFog.fogColorMid.value = new Color(0.67f, 0.5f, 0.32f, 0.44f);
+
+            PP_AncientLoft.settings[0] = rampFog;
+            Weather.transform.GetChild(3).GetComponent<PostProcessVolume>().profile = PP_AncientLoft;
+
+            newAmbient.ambientSkyColor = new Color(1, 1, 0.8f, 1f);//0.9216 1 1 1
+            newAmbient.ambientIntensity = 0.285f; //0.38
+            newAmbient.ApplyLighting();
+            */
+
+           
             #region Fruity
             //forEach Vine, spawn big Fruit
 
@@ -545,9 +463,9 @@ namespace LoopVariants
                                 break;
                             case "RJHangingMoss_LOD0": //202
                                 renderer.sharedMaterial = RJHangingMoss_LOD0;
-                                if (NetworkServer.active)
+                                /*if (NetworkServer.active)
                                 {
-                                    if (WLoopMain.ShouldAddContent && WConfig.Stage_4_Root_Jungle_Fruit.Value)
+                                    if (WLoopMain.ShouldAddContent && WConfig.S_4_Root_Jungle_Fruit.Value)
                                     {
                                         if (UnityEngine.Random.Range(0f, 6f) > 5)
                                         {
@@ -557,7 +475,7 @@ namespace LoopVariants
                                             }
                                         }
                                     }
-                                }
+                                }*/
                                 break;
                             case "matRJTree": //31
                                 renderer.sharedMaterial = matRJTree;
@@ -664,11 +582,6 @@ namespace LoopVariants
 
         public static void AddVariantMonsters(DirectorCardCategorySelection dccs)
         {
-            if (ShouldAddLoopEnemies(dccs) == false)
-            {
-                return;
-            }
-
             DirectorCard DC_Geep = new DirectorCard
             {
                 spawnCard = LegacyResourcesAPI.Load<CharacterSpawnCard>("SpawnCards/CharacterSpawnCards/cscGeepBody"),

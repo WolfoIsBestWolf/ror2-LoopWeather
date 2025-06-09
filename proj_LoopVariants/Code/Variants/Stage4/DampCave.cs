@@ -38,9 +38,14 @@ namespace LoopVariants
         public static Material matTrimSheetLemurianMetalLight;
 
 
-
-        public static void Setup()
+        public static bool setupComplete = false;
+        public static new void Setup()
         {
+            if (setupComplete)
+            {
+                return;
+            }
+            setupComplete = true;
             /*
             Texture2D texWhiteSandSimple = new Texture2D(1024, 1024, TextureFormat.DXT5, true);
             texWhiteSandSimple.LoadImage(Properties.Resources.texWhiteSandSimple, false);
@@ -60,12 +65,12 @@ namespace LoopVariants
             */
 
 
-            Texture2D texMalachite = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/Damp/texMalachite.png");
-            Texture2D spmDCFern1_Atlas = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/Damp/spmDCFern1_Atlas.png");
-            Texture2D texDCRockSide = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/Damp/texDCRockSide.png");
-            Texture2D texDCGravelDiffuse = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/Damp/texDCGravelDiffuse.png");
-            Texture2D texDCGrass = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/Damp/texDCGrass.png");
-            Texture2D texWhiteSandSimple = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/Damp/texWhiteSandSimple.png");
+            Texture2D texMalachite = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/Damp/texMalachite.png");
+            Texture2D spmDCFern1_Atlas = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/Damp/spmDCFern1_Atlas.png");
+            Texture2D texDCRockSide = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/Damp/texDCRockSide.png");
+            Texture2D texDCGravelDiffuse = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/Damp/texDCGravelDiffuse.png");
+            Texture2D texDCGrass = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/Damp/texDCGrass.png");
+            Texture2D texWhiteSandSimple = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/Damp/texWhiteSandSimple.png");
 
 
 
@@ -393,11 +398,6 @@ namespace LoopVariants
 
         public static void AddVariantMonsters(DirectorCardCategorySelection dccs)
         {
-            if (!ShouldAddLoopEnemies(dccs))
-            {
-                return;
-            }
-
             DirectorCard cscVoidBarnacle = new DirectorCard
             {
                 spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/DLC1/VoidBarnacle/cscVoidBarnacle.asset").WaitForCompletion(),

@@ -2,19 +2,23 @@ using RoR2;
 using UnityEngine;
 using UnityEngine.Networking;
  
-namespace LoopVariantConfig
+namespace VariantConfig
 {
     public class OfficialVariant
     {
         public static void Awake()
         {
             On.RoR2.Run.PickNextStageScene += Teleporter_PickLoopVariant;
-            On.RoR2.SceneExitController.IfLoopedUseValidLoopStage += GreenPortal_PickLoopVariant;
+            On.RoR2.SceneExitController.GetLoopedStageOrDefault += GreenPortal_PickLoopVariant;
             On.RoR2.BazaarController.IsUnlockedBeforeLooping += SeerStationVariants;
         }
 
         public static SceneDef VariantToPreLoop(SceneDef loopedScene, WeightedSelection<SceneDef> lookIn)
         {
+            if (lookIn == null)
+            {
+
+            }
             for (int i = 0; i < lookIn.Count; i++) 
             {
                 if (lookIn.choices[i].value.loopedSceneDef == loopedScene)
@@ -51,7 +55,7 @@ namespace LoopVariantConfig
                     self.nextStageScene = self.nextStageScene.loopedSceneDef;
                 }
             }
-            else
+            else if (self.nextStageScene.isLockedBeforeLooping)
             {
                 SceneDef preLoopVariant = VariantToPreLoop(self.nextStageScene, choices);
                 if (preLoopVariant != null)
@@ -62,16 +66,18 @@ namespace LoopVariantConfig
  
         }
 
-        public static SceneDef GreenPortal_PickLoopVariant(On.RoR2.SceneExitController.orig_IfLoopedUseValidLoopStage orig, SceneExitController self, SceneDef sceneDef)
+        public static SceneDef GreenPortal_PickLoopVariant(On.RoR2.SceneExitController.orig_GetLoopedStageOrDefault orig, SceneExitController self, SceneDef sceneDef)
         {
             if (SyncLoopWeather.instance.NextStage_LoopVariant)
             {
                 return sceneDef.loopedSceneDef;
             }
-            else
+            /*else if (sceneDef.isLockedBeforeLooping)
             {
+                SceneDef pre = VariantToPreLoop(sceneDef);
                 return sceneDef;
-            }
+            }*/
+            return sceneDef;
         }
 
 

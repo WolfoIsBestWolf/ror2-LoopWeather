@@ -8,7 +8,8 @@ namespace LoopVariants
     public class Main_Variants
     {
         public static void Start()
-        {
+        {/*
+            return;
             //1
             //Trailer Weather
             Variants_1_GolemPlains.Setup();
@@ -57,7 +58,7 @@ namespace LoopVariants
             Variants_6_Moon.Setup();
             //
  
-
+            */
         }
 
 

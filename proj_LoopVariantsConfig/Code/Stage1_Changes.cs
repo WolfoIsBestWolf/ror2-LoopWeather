@@ -1,9 +1,9 @@
-using LoopVariantConfig;
+using VariantConfig;
 using RoR2;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace LoopVariants
+namespace VariantConfig
 {
     public class Stage1_Changes
     {
@@ -15,6 +15,7 @@ namespace LoopVariants
             }
             DirectorCardCategorySelection dccsLakesnightMonsters = Addressables.LoadAssetAsync<DirectorCardCategorySelection>(key: "RoR2/DLC2/lakesnight/dccsLakesnightMonsters.asset").WaitForCompletion();
             DirectorCardCategorySelection dccsLakesnightInteractables_DLC1 = Addressables.LoadAssetAsync<DirectorCardCategorySelection>(key: "RoR2/DLC2/lakesnight/dccsLakesnightInteractables_DLC1.asset").WaitForCompletion();
+            DirectorCardCategorySelection dccsVillageNightInteractables = Addressables.LoadAssetAsync<DirectorCardCategorySelection>(key: "2751f6d6bca27a44a9e45d87c5bbee1c").WaitForCompletion();
             DirectorCardCategorySelection dccsVillageNightMonsters_Additional = Addressables.LoadAssetAsync<DirectorCardCategorySelection>(key: "RoR2/DLC2/villagenight/dccsVillageNightMonsters_Additional.asset").WaitForCompletion();
 
             //Grandparent, BeetleQueen, Vagrant allowed
@@ -27,8 +28,42 @@ namespace LoopVariants
 
             dccsLakesnightInteractables_DLC1.categories[0].cards[0].minimumStageCompletions = 1; //Void Camp
 
+            //dccsVillageNightInteractables.categories[67].cards[0].minimumStageCompletions = 1;
+
             dccsVillageNightMonsters_Additional.categories[0].cards[1].minimumStageCompletions = 1; //Grave
  
+
+        }
+
+
+
+        public static void OfficialVariantStage1Friendly(DirectorCardCategorySelection dccs)
+        {
+            Debug.Log("Loop Variant DCCS : " + SceneCatalog.mostRecentSceneDef.baseSceneName);
+            switch (SceneInfo.instance.sceneDef.baseSceneName)
+            {
+                case "lakesnight":
+                    if (WConfig.LakesNightSpawnPool.Value)
+                    {
+                        Stage1_Changes.LakesNight_AddStage1FriendlyMonsters(dccs);
+                    }
+                    break;
+                case "villagenight":
+                    if (WConfig.VillageNight_Credits.Value)
+                    {
+                        if (Run.instance.stageClearCount == 0)
+                        {
+                            ClassicStageInfo.instance.sceneDirectorInteractibleCredits = 280;
+                            HG.ArrayUtils.ArrayAppend(ref ClassicStageInfo.instance.bonusInteractibleCreditObjects,
+                                new ClassicStageInfo.BonusInteractibleCreditObject
+                                {
+                                    points = -20, //Large Chest flat reduction
+                                    objectThatGrantsPointsIfEnabled = RoR2.Run.instance.gameObject
+                                });
+                        }
+                    }
+                    break;
+            }
         }
 
 

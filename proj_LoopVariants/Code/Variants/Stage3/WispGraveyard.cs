@@ -6,10 +6,7 @@ namespace LoopVariants
 {
     public class Variants_3_WispGraveyard : Variant_Base
     {
-        public static void Setup()
-        {
-        }
-
+ 
         public static void LoopWeather()
         {
             GameObject Weather = GameObject.Find("/Weather, Wispgraveyard");
@@ -33,11 +30,6 @@ namespace LoopVariants
 
         public static void AddVariantMonsters(DirectorCardCategorySelection dccs)
         {
-            if (ShouldAddLoopEnemies(dccs) == false)
-            {
-                return;
-            }
-
             DirectorCard DC_Child = new DirectorCard
             {
                 spawnCard = Addressables.LoadAssetAsync<SpawnCard>(key: "RoR2/DLC2/Child/cscChild.asset").WaitForCompletion(),

@@ -5,33 +5,24 @@ namespace LoopVariants
 {
     public class Variants_6_Meridian : Variant_Base
     {
-        public static Material matBHFallPlatformSimple;
-        public static Material matBHFallTerrainVines;
-        public static Material matBHFallDomeTrim;
-
-        public static void Setup()
-        {
-            matBHFallPlatformSimple = Addressables.LoadAssetAsync<Material>(key: "RoR2/DLC2/habitatfall/Assets/matBHFallPlatformSimple.mat").WaitForCompletion();
-            matBHFallTerrainVines = Addressables.LoadAssetAsync<Material>(key: "RoR2/DLC2/habitatfall/Assets/matBHFallTerrainVines.mat").WaitForCompletion();
-            matBHFallDomeTrim = Addressables.LoadAssetAsync<Material>(key: "RoR2/DLC2/habitatfall/Assets/matBHFallDomeTrim.mat").WaitForCompletion();
-        }
 
         public static void LoopWeather()
         {
+            Material matBHFallPlatformSimple = Addressables.LoadAssetAsync<Material>(key: "RoR2/DLC2/habitatfall/Assets/matBHFallPlatformSimple.mat").WaitForCompletion();
+            Material matBHFallTerrainVines = Addressables.LoadAssetAsync<Material>(key: "RoR2/DLC2/habitatfall/Assets/matBHFallTerrainVines.mat").WaitForCompletion();
+            Material matBHFallDomeTrim = Addressables.LoadAssetAsync<Material>(key: "RoR2/DLC2/habitatfall/Assets/matBHFallDomeTrim.mat").WaitForCompletion();
 
             GameObject Terrain = GameObject.Find("/HOLDER: Art/Terrain");
 
             Transform BHFoliage = Terrain.transform.GetChild(5);
+            Material matBHDistantTree_Billboard = Object.Instantiate(Addressables.LoadAssetAsync<Material>(key: "RoR2/DLC2/habitatfall/Assets/matBHFallDistantTreeBillboard.mat").WaitForCompletion());
+            Material matBHDistantTree = Addressables.LoadAssetAsync<Material>(key: "RoR2/DLC2/habitatfall/Assets/matBHFallDistantTree.mat").WaitForCompletion();
 
 
             BillboardRenderer[] billboardList = BHFoliage.GetComponentsInChildren<BillboardRenderer>();
             foreach (BillboardRenderer renderer in billboardList)
             {
-                /*if (renderer.billboard.material.name.StartsWith("BHDistantTree_Billboard"))
-                {
-                    
-                }*/
-                renderer.billboard.material = Variants_2_LemurianTemple.matBHDistantTree_Billboard;
+                renderer.billboard.material = matBHDistantTree_Billboard;
             }
             //Why does this one work lol
             MeshRenderer[] rendererList = BHFoliage.GetComponentsInChildren<MeshRenderer>();
@@ -40,7 +31,7 @@ namespace LoopVariants
                 switch (renderer.material.name)
                 {
                     case "matBHDistantTree (Instance)":
-                        renderer.material = Variants_2_LemurianTemple.matBHDistantTree;
+                        renderer.material = matBHDistantTree;
                         break;
                 }
             }

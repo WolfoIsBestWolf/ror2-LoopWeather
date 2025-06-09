@@ -1,6 +1,7 @@
 using RoR2;
 using RoR2.Navigation;
 using System.Collections.Generic;
+using ThreeEyedGames;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
@@ -12,9 +13,14 @@ namespace LoopVariants
     {
         public static Material matGoolakeTerrain;
         public static Cubemap ReflectionProbe = Addressables.LoadAssetAsync<Cubemap>(key: "RoR2/Base/goolake/ReflectionProbe-0.exr").WaitForCompletion();
-
-        public static void Setup()
+        public static bool setupComplete = false;
+        public static new void Setup()
         {
+            if (setupComplete)
+            {
+                return;
+            }
+            setupComplete = true;
             matGoolakeTerrain = Object.Instantiate(Addressables.LoadAssetAsync<Material>(key: "RoR2/Base/goolake/matGoolakeTerrain.mat").WaitForCompletion());
 
             //matGoolakeTerrain.color = new Color(0.6f, 0.64f, 0.6f);
@@ -60,6 +66,9 @@ namespace LoopVariants
             GameObject GooPlaneOldWaterFall = MiscProps.transform.GetChild(2).gameObject;
             GameObject GooPlaneOldWateringHole = MiscProps.transform.GetChild(3).gameObject;
 
+            GooPlaneOldWaterFall.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+            GooPlaneOldWateringHole.transform.GetChild(1).GetChild(0).gameObject.SetActive(true);
+
             DebuffZone debuffZone = GooPlaneOldWateringHole.GetComponentInChildren<DebuffZone>();
             debuffZone.buffType = null;
             DebuffZoneFixed debuffZoneReal = debuffZone.gameObject.AddComponent<DebuffZoneFixed>();
@@ -97,7 +106,7 @@ namespace LoopVariants
             GooPlaneDecor.name = "GooPlane Decor";
 
             GameObject DecorTarHolder_River = new GameObject("TarDecalHolder_TarRiver");
-            if (WConfig.Stage_2_Goolake_River.Value)
+            if (WConfig.S_2_Goolake_River.Value)
             {
                 GameObject GooPlaneRiver = Object.Instantiate(GooPlaneOldWateringHole, MiscProps.transform.parent);
 
@@ -185,49 +194,84 @@ namespace LoopVariants
             HookLighting.overrideAmbientColor = new Color(0.22f, 0.35f, 0.24f, 1);
             #endregion
 
-            //Tried to take/learn this from StageVariety but this shit does not work.
-            List<NodeGraph.NodeIndex> dest = new List<NodeGraph.NodeIndex>();
-            HullMask forbid = (HullMask)7;
-            Bounds bounds = new Bounds
-            {
-                min = new Vector3(230, -120, -300),
-                max = new Vector3(250, -30, -228),
-            };
-            NodeGraph groundNodegraph = SceneInfo.instance.groundNodes;
-            groundNodegraph.blockMap.GetItemsInBounds(bounds, dest);
-            foreach (NodeGraph.NodeIndex index in dest)
-            {
-                groundNodegraph.nodes[index.nodeIndex].forbiddenHulls = forbid;
-            };
-
-
-            NodeGraph airNodegraph = SceneInfo.instance.airNodes;
-            airNodegraph.blockMap.GetItemsInBounds(bounds, dest);
-            foreach (NodeGraph.NodeIndex index in dest)
-            {
-                airNodegraph.nodes[index.nodeIndex].forbiddenHulls = forbid;
-            };
             #region MoreAquaducts
+            Transform Gates = GameplaySpace.transform.Find("Gates");
+            bool isBridgeEnabled = Gates.GetChild(0).gameObject.activeSelf;
+
+
             Transform OriginalAquaduct = GameplaySpace.transform.GetChild(4).GetChild(0);
             GameObject SecondAquadcut = GameObject.Instantiate(OriginalAquaduct.gameObject); //Aquaduct
+            SecondAquadcut.name = "GL_Aqueduct_ExtraForWateringHole";
 
             SecondAquadcut.transform.localScale = OriginalAquaduct.lossyScale;
             SecondAquadcut.transform.localEulerAngles = new Vector3(0, 25, 180);
-            SecondAquadcut.transform.localPosition = new Vector3(214f, -95.1249f, -248f);
+            SecondAquadcut.transform.localPosition = new Vector3(222f, -95.1249f, -248f);
+            SecondAquadcut.transform.localScale = new Vector3(20.3f, 14.3f, 14.3f);
 
-            Transform WaterFall2 = SecondAquadcut.transform.GetChild(1);
-            WaterFall2.localPosition = new Vector3(0, -3, 0);
-            WaterFall2.localScale = new Vector3(1, 0.7f, 1);
+            if (isBridgeEnabled)
+            {
+                Transform WaterFall2 = SecondAquadcut.transform.GetChild(1);
+                WaterFall2.localPosition = new Vector3(0.5f, -7.8f, 0);
+                WaterFall2.localScale = new Vector3(0.7f, 0.1f, 1);
+
+                WaterFall2.gameObject.GetComponent<MeshRenderer>().enabled = false;
+ 
+                WaterFall2.GetChild(5).localPosition = new Vector3(-8.41f, -7.4055f, 0.29f);
+                WaterFall2.GetChild(5).localEulerAngles = new Vector3(0.0175f, 346.4725f, 210.9823f);
+                WaterFall2.GetChild(5).localScale = new Vector3(11.0996f, 8.3594f, 5.6548f);
+
+                WaterFall2.GetChild(6).localPosition = new Vector3(8.5f, 9f, 1f);
+                WaterFall2.GetChild(6).localEulerAngles = new Vector3(0f, 8.7454f, 180f);
+                WaterFall2.GetChild(6).localScale = new Vector3(14.8509f, 15.1327f, 4.8236f);
 
 
 
-            //Disable Bridge 
-            Transform Gates = GameplaySpace.transform.Find("Gates");
-            Gates.GetChild(0).gameObject.SetActive(false);
-            Gates.GetChild(1).gameObject.SetActive(true);
+                WaterFall2.gameObject.GetComponent<MeshRenderer>().enabled = false;
+
+                GameObject newDecal = Object.Instantiate(WaterFall2.GetChild(5).gameObject);
+                GameObject newDecal2 = Object.Instantiate(newDecal);
+                GameObject newDecal3 = Object.Instantiate(newDecal);
+                newDecal.transform.SetParent(SecondAquadcut.transform);
+                newDecal2.transform.SetParent(SecondAquadcut.transform);
+                newDecal3.transform.SetParent(SecondAquadcut.transform);
+                newDecal3.GetComponent<Decal>().Fade = 1f;
+                newDecal2.GetComponent<Decal>().Fade = 4f;
+                newDecal3.GetComponent<Decal>().Fade = 0.5f;
+
+                newDecal.transform.localEulerAngles = new Vector3(0f, 0f, 180f);
+                newDecal.transform.localScale = new Vector3(1.5f, -13f, -0.1f);
+                newDecal.transform.localScale = new Vector3(5f, 11f, 3.8f);
+
+                newDecal2.transform.localEulerAngles = new Vector3(0f, 0f, 215f);
+                newDecal2.transform.localScale = new Vector3(1.5f, -13f, 0f);
+                newDecal2.transform.localScale = new Vector3(15f, 10f, 3f);
+
+                newDecal3.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
+                newDecal3.transform.localScale = new Vector3(3.6f, -5f, 0f);
+                newDecal3.transform.localScale = new Vector3(5f, 6f, 3f);
+
+                GameObject.Destroy(WaterFall2.GetChild(9).gameObject);
+                GameObject.Destroy(WaterFall2.GetChild(8).gameObject);
+                GameObject.Destroy(WaterFall2.GetChild(7).gameObject);
+                GameObject.Destroy(WaterFall2.GetChild(6).gameObject);
+                GameObject.Destroy(WaterFall2.GetChild(5).gameObject);
+                GameObject.Destroy(WaterFall2.GetChild(4).gameObject);
+                GameObject.Destroy(WaterFall2.GetChild(3).gameObject);
+                GameObject.Destroy(WaterFall2.GetChild(1).gameObject);
+
+            }
+            else
+            {
+                Transform WaterFall2 = SecondAquadcut.transform.GetChild(1);
+                WaterFall2.localPosition = new Vector3(0.5f, -3, 0);
+                WaterFall2.localScale = new Vector3(0.7f, 0.7f, 1);
+            }
+
+            
 
 
 
+          
 
             GameObject DecorAquaduct = GameObject.Instantiate(OriginalAquaduct.gameObject); //Aquaduct
 
@@ -279,12 +323,37 @@ namespace LoopVariants
                 RescueShip.SetActive(false);
             }
 
-            // IGuess check for StageVariety
-            if (WLoopMain.ShouldAddContent)
+            #region NodeBlocking
+            /*
+            List<NodeGraph.NodeIndex> dest = new List<NodeGraph.NodeIndex>();
+            HullMask forbid = (HullMask)7;
+            Bounds bounds = new Bounds
             {
-                if (NetworkServer.active)
+                min = new Vector3(230, -120, -300),
+                max = new Vector3(250, -30, -228),
+            };
+            NodeGraph groundNodegraph = SceneInfo.instance.groundNodes;
+            groundNodegraph.blockMap.GetItemsInBounds(bounds, dest);
+            foreach (NodeGraph.NodeIndex index in dest)
+            {
+                groundNodegraph.nodes[index.nodeIndex].forbiddenHulls = forbid;
+            };
+
+
+            NodeGraph airNodegraph = SceneInfo.instance.airNodes;
+            airNodegraph.blockMap.GetItemsInBounds(bounds, dest);
+            foreach (NodeGraph.NodeIndex index in dest)
+            {
+                airNodegraph.nodes[index.nodeIndex].forbiddenHulls = forbid;
+            };*/
+            #endregion
+            #region LemurianDifferentElites
+            // IGuess check for StageVariety
+            /*if (NetworkServer.active)
+            {
+                if (WLoopMain.ShouldAddContent)
                 {
-                    #region SECRET
+               
                     if (Run.instance.stageClearCount > 4 && Run.instance.IsExpansionEnabled(DLC2Content.Equipment.EliteBeadEquipment.requiredExpansion))
                     {
                         GameObject Secret = ApproxCenter.transform.GetChild(0).gameObject;
@@ -303,12 +372,9 @@ namespace LoopVariants
                         inventory.GiveItem(RoR2Content.Items.BoostHp, 20);
                         inventory.GiveEquipmentString("EliteBeadEquipment");
                     }
-                    #endregion
-
-
                 }
-            }
-
+            }*/
+            #endregion
         }
 
 

@@ -7,22 +7,7 @@ namespace LoopVariants
 {
     public class Variants_2_FoggySwamp : Variant_Base
     {
-        public static void Setup()
-        {
-            //On.EntityStates.Destructible.AltarSkeletonDeath.Explode += AltarSkeletonDeath_Explode;
-
-        }
-
-        private static void AltarSkeletonDeath_Explode(On.EntityStates.Destructible.AltarSkeletonDeath.orig_Explode orig, EntityStates.Destructible.AltarSkeletonDeath self)
-        {
-            orig(self);
-            //Add 500 malachites to the elite tier
-            //Malachite Scav that drops smth 
-            //Block healing for rest of stage idk
-
-            //Spawn Vengence clone for every player but Malachite idk dude
-        }
-
+ 
         public static void LoopWeather()
         {
 
@@ -160,12 +145,7 @@ namespace LoopVariants
             rampFog.fogPower.value = 2f;
             process.profile.settings[0] = rampFog;
 
-            Bloom bloom = (Bloom)Variants_4_DampCaveSimpleAbyss.ppSceneDampcaveHot.settings[1];
-            bloom.color.value = new Color(1.2f, 1.2f, 1f, 1f);
-
-            //0.3535 0.4074 0.4434 1
-
-
+         
             GameObject HalcyShrine = Addressables.LoadAssetAsync<GameObject>(key: "RoR2/DLC2/ShrineHalcyonite.prefab").WaitForCompletion();
 
             GameObject Clouds = Object.Instantiate(HalcyShrine.transform.GetChild(7).gameObject);
@@ -175,9 +155,12 @@ namespace LoopVariants
             GameObject Rain = Object.Instantiate(HalcyShrine.transform.GetChild(8).gameObject); //Particle System
             Rain.SetActive(true);
             Rain.AddComponent<WeatherParticles>().lockPosition = true;
-
-
+ 
             HalcyShrine.transform.GetChild(9); //StormPPVolume
+
+            //Bloom bloom = (Bloom)Variants_4_DampCaveSimpleAbyss.ppSceneDampcaveHot.settings[1];
+            //bloom.color.value = new Color(1.2f, 1.2f, 1f, 1f);
+
 
         }
 

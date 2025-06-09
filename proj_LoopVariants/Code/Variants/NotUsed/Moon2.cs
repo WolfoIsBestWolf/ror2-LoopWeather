@@ -4,7 +4,7 @@ namespace LoopVariants
 {
     public class Variants_6_Moon
     {
-        public static void Setup()
+        public static new void Setup()
         {
         }
 

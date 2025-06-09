@@ -14,9 +14,15 @@ namespace LoopVariants
         public static Material matHRWalls;
         public static Material matHRWorm;
         public static Material matHRCrystal;
+        public static bool setupComplete = false;
 
-        public static void Setup()
+        public static new void Setup()
         {
+            if (setupComplete)
+            {
+                return;
+            }
+            setupComplete = true;
             matHRLava = Object.Instantiate(Addressables.LoadAssetAsync<Material>(key: "RoR2/DLC2/helminthroost/Assets/matHRLava.mat").WaitForCompletion());
             matHRTerrain = Object.Instantiate(Addressables.LoadAssetAsync<Material>(key: "RoR2/DLC2/helminthroost/Assets/matHRTerrain.mat").WaitForCompletion());
             matHRTerrainLava = Object.Instantiate(Addressables.LoadAssetAsync<Material>(key: "RoR2/DLC2/helminthroost/Assets/matHRTerrainLava.mat").WaitForCompletion());
@@ -77,7 +83,7 @@ namespace LoopVariants
             //texRampStrongerBurn
 
 
-            Texture2D texHRLavaDiffuse = Assets.Bundle.LoadAsset<Texture2D>("Assets/LoopVariants/Helminth/texHRLavaDiffuse.png");
+            Texture2D texHRLavaDiffuse = Assets.LoadAssetAsync<Texture2D>("Assets/LoopVariants/Helminth/texHRLavaDiffuse.png");
 
             /*Texture2D texHRLavaDiffuse = new Texture2D(512, 512, TextureFormat.DXT5, true);
             texHRLavaDiffuse.LoadImage(Properties.Resources.texHRLavaDiffuse, true);
@@ -160,11 +166,6 @@ namespace LoopVariants
 
         public static void AddVariantMonsters(DirectorCardCategorySelection dccs)
         {
-            if (ShouldAddLoopEnemies(dccs) == false)
-            {
-                return;
-            }
-
             DirectorCard cscHalcy = new DirectorCard
             {
                 spawnCard = Addressables.LoadAssetAsync<CharacterSpawnCard>(key: "RoR2/DLC2/Halcyonite/cscHalcyonite.asset").WaitForCompletion(),
