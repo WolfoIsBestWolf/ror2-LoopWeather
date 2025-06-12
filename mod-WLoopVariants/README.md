@@ -7,15 +7,20 @@ No idea how this mod interacts with Stage Aesthetics or Cooler Stages.
 
 ## Weather changes in-game :
   
-![Image not showing up from Github](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-LittleGameplayTweaks/main/modPageImages/ltgStages.png)
-![Image not showing up from Github](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-LittleGameplayTweaks/main/modPageImages/ltgStages2.png)
+![Image not showing up from Github](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-LoopWeather/main/_modPageImages/loopVariants1.png)
+![Image not showing up from Github](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-LoopWeather/main/_modPageImages/loopVariants2.png)
 
  <details>
   <summary>Legacy Variants / Disabled by default</summary>
   
-![Image not showing up from Github](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-LittleGameplayTweaks/main/modPageImages/ltgStages2.png)
+![Image not showing up from Github](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-LoopWeather/main/_modPageImages/loopVariantsDisabled.png)
 
 </details>
+
+
+#
+Reformed Altar & Prime Meridian will have their green leaves replaced with the pink-reddish ones from Golden Dieback during loops, since they're directly connected.
+![Image not showing up from Github](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-LoopWeather/main/_modPageImages/loopVariantsColossusExtras.png)
 
 #
 ### Inspirations :
@@ -25,12 +30,12 @@ No idea how this mod interacts with Stage Aesthetics or Cooler Stages.
 - Abandoned Aqueduct	: Unused Tar River, Passage of time overfilling it.
 - Wetland Aspect	: Internal name FoggySwamp, Passage of time overfilling it.
 - Aphelian Sanctuary	: Eclipsing the Sun, ominous Lunar glow.
-- Reformed Altar	: Directly connected to Treeborn, so should be Golden Dieback on loop. More gold feeling.
 - Scorched Acres	: Unused Eclipse Weather. (they just tested it here for the menu for some reason)
 - Sulfur Pools		: Real Blue "Lava" Volcanos. 
-- Abyssal Depths	: Red Plane color-scheme
 - Sundered Grove	: Spring/Autumn (copying Golden Dieback)
-
+---
+- Reformed Altar	: Directly connected to Treeborn, so should be Golden Dieback on loop. More gold feeling.
+- Abyssal Depths	: Red Plane color-scheme
 - Helminth Hatchery	: Molten Gold
  ```
  
@@ -49,16 +54,14 @@ No idea how this mod interacts with Stage Aesthetics or Cooler Stages.
  
 Basically all of these can fit the "Passage of Time" theme.\
 Even the more interesting changes such as Blue Lava Sulfur Pools, the background Volcano erupting as an idea for that.
-
-Additionally this mod changes the Treeborn visible in Prime Meridian to Golden Dieback on loops.
-
-![Image not showing up from Github](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-LittleGameplayTweaks/main/modPageImages/ltgStagesMeridian.png)
-
+ 
 ##
  
 Report bugs to @Wolfo.wolfo in the Risk of Rain 2 discord or RoR2 Modding discord.\
 If you're reporting a bug that isn't something obvious include the log file.
 
 This mod does not add these variants as "new stages" or new spawn pools for them. Instead simply editing the weather/pools of existing ones.
+
+Stage Aesthetic compatibility is not handled by me.
 
 Not entirely happy with how some turned out but some are great.

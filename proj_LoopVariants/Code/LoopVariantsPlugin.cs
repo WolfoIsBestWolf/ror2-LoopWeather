@@ -1,6 +1,5 @@
 ﻿using BepInEx;
 using VariantConfig;
-using R2API.Utils;
 using RoR2;
 using System;
 using System.Collections.Generic;
@@ -10,10 +9,8 @@ using UnityEngine;
 
 namespace LoopVariants
 {
-    [BepInDependency("com.bepis.r2api")]
     [BepInDependency("Wolfo.LoopVariantConfig")]
     [BepInPlugin("Wolfo.LoopVariantsWolfo", "WolfosLoopVariants", "1.5.0")]
-    [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
     public class WLoopMain : BaseUnityPlugin
     {
 
