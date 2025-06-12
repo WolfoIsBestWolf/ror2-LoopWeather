@@ -77,16 +77,17 @@ namespace LoopVariants
             debuffZoneReal.buffApplicationSoundString = debuffZone.buffApplicationSoundString;
             debuffZoneReal.buffDuration = 3;
             debuffZoneReal.buffType = SlowTar;
+            GameObject.Destroy(debuffZone);
 
-            debuffZone = GooPlaneOldWaterFall.GetComponentInChildren<DebuffZone>();
-            debuffZone.buffType = null;
-            debuffZoneReal = debuffZone.gameObject.AddComponent<DebuffZoneFixed>();
+            DebuffZone debuffZone2 = GooPlaneOldWaterFall.GetComponentInChildren<DebuffZone>();
+            debuffZone2.buffType = null;
+            debuffZoneReal = debuffZone2.gameObject.AddComponent<DebuffZoneFixed>();
             debuffZoneReal.interval = 1;
-            debuffZoneReal.buffApplicationEffectPrefab = debuffZone.buffApplicationEffectPrefab;
-            debuffZoneReal.buffApplicationSoundString = debuffZone.buffApplicationSoundString;
+            debuffZoneReal.buffApplicationEffectPrefab = debuffZone2.buffApplicationEffectPrefab;
+            debuffZoneReal.buffApplicationSoundString = debuffZone2.buffApplicationSoundString;
             debuffZoneReal.buffDuration = 3;
             debuffZoneReal.buffType = SlowTar;
-
+            GameObject.Destroy(debuffZone2);
             GooPlaneOldWaterFall.transform.localPosition = new Vector3(107.6f, -122.7f, 50.3f);
             GooPlaneOldWaterFall.transform.localScale = new Vector3(7.5579f, 1f, 7.8565f);
             GooPlaneOldWaterFall.transform.GetChild(0).localScale = new Vector3(10f, 100f, 10);
@@ -213,19 +214,7 @@ namespace LoopVariants
                 Transform WaterFall2 = SecondAquadcut.transform.GetChild(1);
                 WaterFall2.localPosition = new Vector3(0.5f, -7.8f, 0);
                 WaterFall2.localScale = new Vector3(0.7f, 0.1f, 1);
-
-                WaterFall2.gameObject.GetComponent<MeshRenderer>().enabled = false;
  
-                WaterFall2.GetChild(5).localPosition = new Vector3(-8.41f, -7.4055f, 0.29f);
-                WaterFall2.GetChild(5).localEulerAngles = new Vector3(0.0175f, 346.4725f, 210.9823f);
-                WaterFall2.GetChild(5).localScale = new Vector3(11.0996f, 8.3594f, 5.6548f);
-
-                WaterFall2.GetChild(6).localPosition = new Vector3(8.5f, 9f, 1f);
-                WaterFall2.GetChild(6).localEulerAngles = new Vector3(0f, 8.7454f, 180f);
-                WaterFall2.GetChild(6).localScale = new Vector3(14.8509f, 15.1327f, 4.8236f);
-
-
-
                 WaterFall2.gameObject.GetComponent<MeshRenderer>().enabled = false;
 
                 GameObject newDecal = Object.Instantiate(WaterFall2.GetChild(5).gameObject);
@@ -239,15 +228,15 @@ namespace LoopVariants
                 newDecal3.GetComponent<Decal>().Fade = 0.5f;
 
                 newDecal.transform.localEulerAngles = new Vector3(0f, 0f, 180f);
-                newDecal.transform.localScale = new Vector3(1.5f, -13f, -0.1f);
+                newDecal.transform.localPosition = new Vector3(1.5f, -13f, -0.1f);
                 newDecal.transform.localScale = new Vector3(5f, 11f, 3.8f);
 
                 newDecal2.transform.localEulerAngles = new Vector3(0f, 0f, 215f);
-                newDecal2.transform.localScale = new Vector3(1.5f, -13f, 0f);
+                newDecal2.transform.localPosition = new Vector3(1.5f, -13f, 0f);
                 newDecal2.transform.localScale = new Vector3(15f, 10f, 3f);
 
                 newDecal3.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
-                newDecal3.transform.localScale = new Vector3(3.6f, -5f, 0f);
+                newDecal3.transform.localPosition = new Vector3(3.6f, -5f, 0f);
                 newDecal3.transform.localScale = new Vector3(5f, 6f, 3f);
 
                 GameObject.Destroy(WaterFall2.GetChild(9).gameObject);
@@ -379,72 +368,70 @@ namespace LoopVariants
 
 
 
-        public class DebuffZoneFixed : MonoBehaviour
+      
+    }
+    public class DebuffZoneFixed : MonoBehaviour
+    {
+        private void Start()
         {
-            private void Start()
+            /*if (WLoopMain.ShouldAddContent == false)
             {
-                if (WLoopMain.ShouldAddContent == false)
-                {
-                    buffType = null;
-                }
-            }
-
-            private void OnTriggerEnter(Collider other)
-            {
-                CharacterBody component = other.GetComponent<CharacterBody>();
-                if (!component)
-                {
-                    return;
-                }
-                Util.PlaySound(buffApplicationSoundString, component.gameObject);
-                if (buffApplicationEffectPrefab)
-                {
-                    EffectManager.SpawnEffect(buffApplicationEffectPrefab, new EffectData
-                    {
-                        origin = component.mainHurtBox.transform.position,
-                        scale = component.radius
-                    }, false);
-                }
-                if (NetworkServer.active && buffType)
-                {
-                    component.AddTimedBuff(buffType.buffIndex, buffDuration);
-                }
-            }
-
-
-            private void OnTriggerStay(Collider other)
-            {
-                if (!buffType)
-                {
-                    return;
-                }
-                if (NetworkServer.active)
-                {   
-                    buffTimer -= Time.fixedDeltaTime;
-                    if (buffTimer <= 0f)
-                    {
-                        buffTimer = interval;
-                        CharacterBody component = other.GetComponent<CharacterBody>();
-                        if (component)
-                        {
-                            component.AddTimedBuff(buffType.buffIndex, buffDuration);
-                        }
-                    }
-                }
-            }
-
-            public float buffTimer;
-            public float interval;
-
-            [Tooltip("The buff type to grant")]
-            public BuffDef buffType;
-
-            [Tooltip("The buff duration")]
-            public float buffDuration;
-
-            public string buffApplicationSoundString;
-
-            public GameObject buffApplicationEffectPrefab;
+                buffType = null;
+            }*/
         }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            CharacterBody component = other.GetComponent<CharacterBody>();
+            if (!component)
+            {
+                return;
+            }
+            Util.PlaySound(buffApplicationSoundString, component.gameObject);
+            if (buffApplicationEffectPrefab)
+            {
+                EffectManager.SpawnEffect(buffApplicationEffectPrefab, new EffectData
+                {
+                    origin = component.mainHurtBox.transform.position,
+                    scale = component.radius
+                }, false);
+            }
+            if (buffType && component.hasEffectiveAuthority)
+            {
+                component.CallCmdAddTimedBuff(buffType.buffIndex, buffDuration);
+            }
+        }
+
+
+        private void OnTriggerStay(Collider other)
+        {
+            if (!buffType)
+            {
+                return;
+            }
+            buffTimer -= Time.fixedDeltaTime;
+            if (buffTimer <= 0f)
+            {
+                buffTimer = interval;
+                CharacterBody component = other.GetComponent<CharacterBody>();
+                if (component && component.hasEffectiveAuthority)
+                {
+                    component.CallCmdAddTimedBuff(buffType.buffIndex, buffDuration);
+                }
+            }
+        }
+
+        public float buffTimer;
+        public float interval;
+
+        [Tooltip("The buff type to grant")]
+        public BuffDef buffType;
+
+        [Tooltip("The buff duration")]
+        public float buffDuration;
+
+        public string buffApplicationSoundString;
+
+        public GameObject buffApplicationEffectPrefab;
     }
 }

@@ -1,12 +1,11 @@
 {
     "name": "LoopVariantConfig",
-    "version_number": "1.5.0",
+    "version_number": "1.0.0",
     "website_url": "https://github.com/WolfoIsBestWolf/ror2-LoopVariants",
-    "description": "[Server-Side] Adds config to allow Loop Variants to occur pre loop.",
+    "description": "[Server-Side] Adds config to allow Loop Variants to occur pre loop or vice versa.",
     "dependencies": [
 		"Rune580-Risk_Of_Options-2.8.2",
         "bbepis-BepInExPack-5.4.9",
-		"RiskofThunder-HookGenPatcher-1.2.1",
-		"tristanmcpherson-R2API-5.0.5"
+		"RiskofThunder-HookGenPatcher-1.2.1"
     ]
 }

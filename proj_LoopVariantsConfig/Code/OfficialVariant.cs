@@ -13,17 +13,13 @@ namespace VariantConfig
             On.RoR2.BazaarController.IsUnlockedBeforeLooping += SeerStationVariants;
         }
 
-        public static SceneDef VariantToPreLoop(SceneDef loopedScene, WeightedSelection<SceneDef> lookIn)
+        public static SceneDef VariantToPreLoop(SceneDef loopedScene)
         {
-            if (lookIn == null)
+            for (int i = 0; i < SceneCatalog._stageSceneDefs.Length; i++)
             {
-
-            }
-            for (int i = 0; i < lookIn.Count; i++) 
-            {
-                if (lookIn.choices[i].value.loopedSceneDef == loopedScene)
+                if (SceneCatalog._stageSceneDefs[i].loopedSceneDef == loopedScene)
                 {
-                    return lookIn.choices[i].value;
+                    return SceneCatalog._stageSceneDefs[i];
                 }
             }
             return null;
@@ -57,7 +53,7 @@ namespace VariantConfig
             }
             else if (self.nextStageScene.isLockedBeforeLooping)
             {
-                SceneDef preLoopVariant = VariantToPreLoop(self.nextStageScene, choices);
+                SceneDef preLoopVariant = VariantToPreLoop(self.nextStageScene);
                 if (preLoopVariant != null)
                 {
                     self.nextStageScene = preLoopVariant;
@@ -72,11 +68,11 @@ namespace VariantConfig
             {
                 return sceneDef.loopedSceneDef;
             }
-            /*else if (sceneDef.isLockedBeforeLooping)
+            else if (sceneDef.isLockedBeforeLooping)
             {
                 SceneDef pre = VariantToPreLoop(sceneDef);
                 return sceneDef;
-            }*/
+            }
             return sceneDef;
         }
 

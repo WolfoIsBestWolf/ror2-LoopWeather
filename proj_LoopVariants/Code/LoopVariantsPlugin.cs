@@ -18,8 +18,7 @@ namespace LoopVariants
     {
 
         //public static List<string> ExistingVariants = new List<string>() { "wispgraveyard", "golemplains", "goolake", "dampcavesimple", "snowyforest", "helminthroost", "foggyswamp", "rootjungle", "sulfurpools", "lemuriantemple", "ancientloft" };
-        public static List<string> DisabledVariants = new List<string>();
-
+        
         public static bool AddMonsters
         {
             get
@@ -54,8 +53,7 @@ namespace LoopVariants
             WConfig.InitConfig();
 
             Main_Variants.Start();
-
-            RemoveVariantNames();
+ 
             On.RoR2.UI.AssignStageToken.Start += ApplyLoopNameChanges;
  
             VariantConfig.VariantConfig.applyWeatherDCCS += VariantDCCS;
@@ -80,6 +78,11 @@ namespace LoopVariants
 
         private void VariantConfig_applyWeatherGlobal(SyncLoopWeather weather)
         {
+            if (weather.AppliedToCurrentStage)
+            {
+                return;
+            }
+            
             bool hadVariant = false;
             try
             {
@@ -156,7 +159,7 @@ namespace LoopVariants
                         if (WConfig.S_3_Wisp.Value)
                         {
                             hadVariant = true;
-                            Variants_3_WispGraveyard.LoopWeather();
+                            Variants_3_WispGraveyard.Setup();
                             Variants_3_WispGraveyard.LoopWeather();
                         }
                         break;
@@ -233,8 +236,10 @@ namespace LoopVariants
 
             if (hadVariant)
             {
-                Debug.Log("Applying Weather to " + SceneInfo.instance.sceneDef.baseSceneName);
                 SyncLoopWeather.instance.AppliedToCurrentStage = true;
+                SyncLoopWeather.instance.nameTokenOverride = SceneInfo.instance.sceneDef.nameToken + "_LOOP";
+                SyncLoopWeather.instance.descTokenOverride = SceneInfo.instance.sceneDef.subtitleToken + "_LOOP";
+                Debug.Log("Applying Weather to " + SceneInfo.instance.sceneDef.baseSceneName);
             }
         }
 
@@ -286,85 +291,7 @@ namespace LoopVariants
                 Debug.LogWarning("LoopVariants Error: " + e);
             }
         }
-
-        public static void RemoveVariantNames()
-        {
-
-            if (!WConfig.S_1_Golem.Value)
-            {
-                DisabledVariants.Add("golemplains");
-            }
-            if (WConfig.S_1_Roost != null && !WConfig.S_1_Roost.Value)
-            {
-                DisabledVariants.Add("blackbeach");
-            }
-            if (!WConfig.S_1_Snow.Value)
-            {
-                DisabledVariants.Add("snowyforest");
-            }
-            //
-            if (!WConfig.S_2_Goolake.Value)
-            {
-                DisabledVariants.Add("goolake");
-            }
-            if (!WConfig.S_2_FoggySwamp.Value)
-            {
-                DisabledVariants.Add("foggyswamp");
-            }
-            if (!WConfig.S_2_Ancient.Value)
-            {
-                DisabledVariants.Add("ancientloft");
-            }
-            if (!WConfig.S_2_LemurianTemple_Legacy.Value)
-            {
-                DisabledVariants.Add("lemuriantemple");
-            }
-            //
-            if (WConfig.S_3_Frozen != null && !WConfig.S_3_Frozen.Value)
-            {
-                DisabledVariants.Add("frozenwall");
-            }
-            if (!WConfig.S_3_Wisp.Value)
-            {
-                DisabledVariants.Add("wispgraveyard");
-            }
-            if (!WConfig.S_3_Sulfur.Value)
-            {
-                DisabledVariants.Add("sulfurpools");
-            }
-            //
-            if (!WConfig.S_4_DampAbyss_Legacy.Value)
-            {
-                DisabledVariants.Add("dampcavesimple");
-            }
-            if (WConfig.S_4_Ship != null && !WConfig.S_4_Ship.Value)
-            {
-                DisabledVariants.Add("shipgraveyard");
-            }
-            if (!WConfig.S_4_Root_Jungle.Value)
-            {
-                DisabledVariants.Add("rootjungle");
-            }
-            //
-            if (WConfig.S_5_Sky != null && !WConfig.S_5_Sky.Value)
-            {
-                DisabledVariants.Add("skymeadow");
-            }
-            if (!WConfig.S_5_Helminth_Legacy.Value)
-            {
-                DisabledVariants.Add("helminthroost");
-            }
-            //
-            if (WConfig.S_6_Commencement != null && !WConfig.S_6_Commencement.Value)
-            {
-                DisabledVariants.Add("moon2");
-            }
-            if (!WConfig.S_6_Meridian.Value)
-            {
-                DisabledVariants.Add("meridian");
-            }
-        }
-
+ 
         private static void ApplyLoopNameChanges(On.RoR2.UI.AssignStageToken.orig_Start orig, RoR2.UI.AssignStageToken self)
         {
             orig(self);
@@ -372,14 +299,10 @@ namespace LoopVariants
             {
                 if (SyncLoopWeather.instance.CurrentStage_LoopVariant && SyncLoopWeather.instance.AppliedToCurrentStage)
                 {
-                    SceneDef mostRecentSceneDef = SceneCatalog.mostRecentSceneDef;
-                    if (Language.english.TokenIsRegistered(mostRecentSceneDef.nameToken + "_LOOP"))
+                    if (Language.english.TokenIsRegistered(SyncLoopWeather.instance.nameTokenOverride))
                     {
-                        if (!DisabledVariants.Contains(mostRecentSceneDef.baseSceneName))
-                        {
-                            self.titleText.SetText(Language.GetString(mostRecentSceneDef.nameToken + "_LOOP"), true);
-                            self.subtitleText.SetText(Language.GetString(mostRecentSceneDef.subtitleToken + "_LOOP"), true);
-                        }
+                        self.titleText.SetText(Language.GetString(SyncLoopWeather.instance.nameTokenOverride), true);
+                        self.subtitleText.SetText(Language.GetString(SyncLoopWeather.instance.descTokenOverride), true);
                     }
                 }
             }

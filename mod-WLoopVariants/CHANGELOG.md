@@ -3,15 +3,18 @@
 v1.5.0
 Fixed for DLC2.4
 Split loop variant config into it's mod.
-Clients can now roll for Variants if the Host does not have the mod.
 
+Clients can now roll for Variants if the Host does not have the mod.
+Mod now only sets "AppliedVariant" bool if it actually did apply smth.
 Moved an extra Aquaduct to make more sense as Client-Side mod.
-Clients without mod no longer get Gooed.
+Aquaduct wont be tarring over a bridge anymore.
+Clients without mod wont get tarred && ModClients can get tarred even if host doesn't have mod.
 
 Mod no longer pre-loads everything, instead loading as Variants come up.
+Hopefully this doesnt cause issues.
 
-Looking back at this mod, some of the variants really aren't much to be proud of.
 Disabled Reformed, Depths & Helminth variants by default
+Not really proud of these variants. 
 
 
 v1.4.3

@@ -52,8 +52,8 @@ namespace LoopVariants
             LegacyVariants = ConfigFileSTAGES.Bind(
                "Main",
                "Legacy Variants",
-                true,
-               "I may disable variants i'm not entirely happy with after some time. This enables all the config for those."
+                false,
+               "I may disable variants i'm not entirely happy with after some time.\nThis changes the config value of all of those\nYou can still turn them on or off individually"
            );
             LegacyVariants.SettingChanged += LegacyVariants_SettingChanged;
 
@@ -227,7 +227,7 @@ namespace LoopVariants
             );
             S_2_Goolake_River = ConfigFileSTAGES.Bind(
                  "Stage 2",
-                 "Abandoned Aquaduct - River of Tar",
+                 "Abandoned Aquaduct | River of Tar",
                  true,
                  "Enable the Tar River in the alt of this stage"
              );

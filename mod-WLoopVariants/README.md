@@ -10,20 +10,29 @@ No idea how this mod interacts with Stage Aesthetics or Cooler Stages.
 ![Image not showing up from Github](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-LittleGameplayTweaks/main/modPageImages/ltgStages.png)
 ![Image not showing up from Github](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-LittleGameplayTweaks/main/modPageImages/ltgStages2.png)
 
+ <details>
+  <summary>Legacy Variants / Disabled by default</summary>
+  
+![Image not showing up from Github](https://raw.githubusercontent.com/WolfoIsBestWolf/ror2-LittleGameplayTweaks/main/modPageImages/ltgStages2.png)
+
+</details>
+
 #
 ### Inspirations :
-- Titanic Plains : Version made for old trailers.
-- Siphoned Forest : Aurora Borealis are cool, the one it already has was barley visible.  
-- Abandoned Aqueduct : Unused Tar River, Passage of time overfilling it.
-- Wetland Aspect : Internal name FoggySwamp, Passage of time overfilling it.
-- Aphelian Sanctuary : Eclipsing the Sun, ominous Lunar glow.
-- Reformed Altar : Directly connected to Treeborn, so should be Golden Dieback on loop. More gold feeling.
-- Scorched Acres : Unused Eclipse Weather. (they just tested it here for the menu for some reason)
-- Sulfur Pools : Real Blue "Lava" Volcanos. 
-- Abyssal Depths : Red Plane color-scheme
-- Sundered Grove : Spring/Autumn theme with Fruits
-- Helminth Hatchery : Molten Gold
- 
+```
+- Titanic Plains	: Version made for old trailers.
+- Siphoned Forest	: Aurora Borealis are cool, the one it already has was barley visible.  
+- Abandoned Aqueduct	: Unused Tar River, Passage of time overfilling it.
+- Wetland Aspect	: Internal name FoggySwamp, Passage of time overfilling it.
+- Aphelian Sanctuary	: Eclipsing the Sun, ominous Lunar glow.
+- Reformed Altar	: Directly connected to Treeborn, so should be Golden Dieback on loop. More gold feeling.
+- Scorched Acres	: Unused Eclipse Weather. (they just tested it here for the menu for some reason)
+- Sulfur Pools		: Real Blue "Lava" Volcanos. 
+- Abyssal Depths	: Red Plane color-scheme
+- Sundered Grove	: Spring/Autumn (copying Golden Dieback)
+
+- Helminth Hatchery	: Molten Gold
+ ```
  
  <details>
   <summary>Enemy additions (if enabled)</summary>
@@ -36,9 +45,8 @@ No idea how this mod interacts with Stage Aesthetics or Cooler Stages.
 - Helminth Hatchery : Halcyonite
 </details>
  
-
-Viscious Falls & Disturbed Impact won't have Elder Lemurians or Void Reavers on stage 1.
-
+ 
+ 
 Basically all of these can fit the "Passage of Time" theme.\
 Even the more interesting changes such as Blue Lava Sulfur Pools, the background Volcano erupting as an idea for that.
 

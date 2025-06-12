@@ -1,6 +1,5 @@
 ﻿using BepInEx;
 using MonoMod.Cil;
-using R2API.Utils;
 using RoR2;
 using System;
 using UnityEngine;
@@ -9,9 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace VariantConfig
 {
-    [BepInDependency("com.bepis.r2api")]
     [BepInPlugin("Wolfo.LoopVariantConfig", "LoopVariantConfig", "1.5.0")]
-    [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
     public class VariantConfig : BaseUnityPlugin
     {
         public static bool HostHasMod_ = false;
@@ -73,6 +70,7 @@ namespace VariantConfig
         private System.Collections.IEnumerator Global_RollForNextStage(On.RoR2.Stage.orig_Start orig, Stage self)
         {
             var temp = orig(self);
+            SyncLoopWeather.instance.nameTokenOverride = string.Empty;
             SyncLoopWeather.instance.AppliedToCurrentStage = false;
             SyncLoopWeather.instance.RollForLoopWeather(false);
             //If Client && HostNoMod or Host
@@ -330,6 +328,8 @@ namespace VariantConfig
         }
 
         public bool AppliedToCurrentStage;
+        public string nameTokenOverride;
+        public string descTokenOverride;
 
         public bool Next_Client;
         public bool Next_Host;

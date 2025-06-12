@@ -1,20 +1,20 @@
-Adds config to allow Loop Variants to occur pre-loop.\
+Adds config to allow Loop Variants to occur pre-loop.
+
 Or for unLooped variants to happen on Loops.
 
 
 
 #
-
-Stage 1 Loop Variants will have some changes to be more Stage 1 Friendly.
+Makes some enemies properly loop exclusive on the Stage 1 Variants so they can better fit a stage 1 role.
 
 Viscious Falls :
-- No Imp Overlord & Grovetender
-- No Elder Lemurian & Void Reaver
-- No Void Seed
+- Imp Overlord & Grovetender
+- Elder Lemurian & Void Reaver
 
 Disturbed Impact :
-- No Grovetender
-- Scales as 280 credits with flat -20 for Guaranteed Large Chest
+- Grovetender
+- Pre-Loop: Scales as 280 credits with flat -20 for Guaranteed Large Chest
+- - Normally has 310 credits, would be too much for a Stage 1.
 
  
  
